@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>图片背景更换工具</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <h1>🖼️ 图片背景更换</h1>
+      <p class="subtitle">纯前端 AI 抠图 · 无需上传服务器 · 隐私安全</p>
+    </header>
+
+    <main class="main">
+      <section class="upload-section" id="uploadSection">
+        <input type="file" id="fileInput" accept="image/*" hidden />
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📁</div>
+          <p>拖拽图片到此处，或点击选择图片</p>
+          <p class="upload-hint">支持 JPG / PNG / WebP，建议不超过 4MB</p>
+        </div>
+      </section>
+
+      <section class="editor-section hidden" id="editorSection">
+        <div class="toolbar">
+          <div class="toolbar-group">
+            <button class="btn btn-primary" id="btnRemoveBg">
+              <span class="btn-icon">✂️</span> AI 去除背景
+            </button>
+            <button class="btn" id="btnManualPick">
+              <span class="btn-icon">🎯</span> 手动取色去除
+            </button>
+          </div>
+
+          <div class="toolbar-group">
+            <button class="btn" id="btnReset">
+              <span class="btn-icon">↩️</span> 重置
+            </button>
+            <button class="btn" id="btnReupload">
+              <span class="btn-icon">📂</span> 换图
+            </button>
+            <button class="btn btn-success" id="btnDownload">
+              <span class="btn-icon">💾</span> 下载结果
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-body">
+          <div class="canvas-panel">
+            <div class="canvas-wrapper" id="canvasWrapper">
+              <canvas id="mainCanvas"></canvas>
+              <div class="canvas-overlay hidden" id="canvasOverlay">
+                <div class="spinner"></div>
+                <p id="overlayText">正在处理...</p>
+              </div>
+            </div>
+            <div class="canvas-info">
+              <span id="imageSizeInfo"></span>
+              <span id="zoomInfo">100%</span>
+            </div>
+          </div>
+
+          <div class="sidebar">
+            <div class="panel">
+              <h3 class="panel-title">背景设置</h3>
+
+              <div class="form-group">
+                <label>
+                  <input type="radio" name="bgType" value="transparent" checked />
+                  透明背景
+                </label>
+                <label>
+                  <input type="radio" name="bgType" value="color" />
+                  纯色背景
+                </label>
+                <label>
+                  <input type="radio" name="bgType" value="gradient" />
+                  渐变背景
+                </label>
+                <label>
+                  <input type="radio" name="bgType" value="image" />
+                  图片背景
+                </label>
+              </div>
+
+              <div class="bg-options hidden" id="bgColorOption">
+                <div class="form-group">
+                  <label>背景颜色</label>
+                  <div class="color-input-row">
+                    <input type="color" id="bgColor" value="#ffffff" />
+                    <input type="text" id="bgColorText" value="#ffffff" maxlength="7" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-options hidden" id="bgGradientOption">
+                <div class="form-group">
+                  <label>起始颜色</label>
+                  <input type="color" id="gradStart" value="#667eea" />
+                </div>
+                <div class="form-group">
+                  <label>结束颜色</label>
+                  <input type="color" id="gradEnd" value="#764ba2" />
+                </div>
+                <div class="form-group">
+                  <label>渐变方向</label>
+                  <select id="gradDirection">
+                    <option value="to bottom">从上到下</option>
+                    <option value="to right">从左到右</option>
+                    <option value="to bottom right">左上到右下</option>
+                    <option value="to bottom left">右上到左下</option>
+                    <option value="circle">径向渐变</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="bg-options hidden" id="bgImageOption">
+                <div class="form-group">
+                  <label>选择背景图片</label>
+                  <button class="btn btn-block" id="btnSelectBgImage">选择图片</button>
+                  <input type="file" id="bgImageInput" accept="image/*" hidden />
+                </div>
+                <div class="bg-image-preview hidden" id="bgImagePreview">
+                  <img id="bgImagePreviewImg" />
+                </div>
+              </div>
+            </div>
+
+            <div class="panel hidden" id="manualPanel">
+              <h3 class="panel-title">手动取色设置</h3>
+              <div class="form-group">
+                <label>容差: <span id="toleranceValue">30</span></label>
+                <input type="range" id="tolerance" min="1" max="100" value="30" />
+              </div>
+              <div class="form-group">
+                <label>边缘羽化: <span id="featherValue">2</span></label>
+                <input type="range" id="feather" min="0" max="20" value="2" />
+              </div>
+              <p class="hint-text">点击图片上要去除的背景颜色区域</p>
+              <div class="picked-color hidden" id="pickedColorBox">
+                <span>已选颜色：</span>
+                <span class="color-swatch" id="pickedSwatch"></span>
+                <span id="pickedColorText"></span>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3 class="panel-title">预览</h3>
+              <div class="preview-tabs">
+                <button class="tab-btn active" data-tab="result">结果</button>
+                <button class="tab-btn" data-tab="original">原图</button>
+                <button class="tab-btn" data-tab="compare">对比</button>
+              </div>
+              <div class="preview-container" id="previewContainer">
+                <canvas id="previewCanvas"></canvas>
+              </div>
+              <div class="checkerboard-bg" id="checkerboardHint">
+                棋盘格 = 透明区域
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>基于 <a href="https://github.com/imgly/background-removal-js" target="_blank">@imgly/background-removal</a> · 所有处理均在浏览器本地完成</p>
+    </footer>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
