@@ -1,17 +1,30 @@
 # Third-Party Notices
 
-## IMG.LY Background Removal
+## @bunnio/rembg-web
 
-This project uses the `@imgly/background-removal` npm package.
+This project uses the `@bunnio/rembg-web` npm package for AI-powered background removal.
 
-- Upstream project: https://github.com/imgly/background-removal-js
-- Package: https://www.npmjs.com/package/@imgly/background-removal
-- License: GNU Affero General Public License v3.0 (AGPL-3.0)
-- Copyright: IMG.LY GmbH and other respective copyright holders
+- Package: https://www.npmjs.com/package/@bunnio/rembg-web
+- Repository: https://github.com/bunnio/rembg-web
+- License: MIT License
+- Copyright: bunnio and other respective copyright holders
 
-The package is used for AI-powered image background removal. This project adds a certificate-photo background replacement interface and related image editing functionality.
+The package runs ONNX Runtime Web in the browser and uses deep learning models (e.g., U2Net, Silueta) for image segmentation.
 
-The upstream project's license and copyright notices must be preserved as applicable.
+## ONNX Runtime Web
+
+The `@bunnio/rembg-web` package depends on ONNX Runtime Web for running neural network inference in the browser.
+
+- Project: https://github.com/microsoft/onnxruntime
+- License: MIT License
+- Copyright: Microsoft Corporation
+
+## Model Weights
+
+The AI models used by this project (e.g., U2Net, Silueta) are pre-trained deep learning models loaded at runtime. These models are subject to their respective licenses as defined by their original authors. Please review the model licenses before redistribution or commercial use.
+
+- U2Net: https://github.com/xuebinqin/U-2-Net (Apache 2.0 / MIT)
+- Silueta: Derived from U2Net architecture
 
 ## Other Third-Party Dependencies
 

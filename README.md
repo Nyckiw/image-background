@@ -1,11 +1,9 @@
 ## License and Attribution
 
-This project is a derivative or integration project built using the open-source package `@imgly/background-removal`.
+This project uses the open-source package `@bunnio/rembg-web` for AI-powered background removal.
 
-Original project:
-https://github.com/imgly/background-removal-js
-
-The upstream background removal package is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+- Package: https://www.npmjs.com/package/@bunnio/rembg-web
+- License: MIT License
 
 This project adds certificate-photo background replacement features, including background color selection, custom background images, image previews, and image export.
 

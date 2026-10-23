@@ -1,4 +1,4 @@
-import { removeBackground as imglyRemoveBackground } from "@imgly/background-removal";
+import { remove as rembgRemove } from "@bunnio/rembg-web";
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -205,21 +205,20 @@ async function handleFile(file) {
 async function removeBackgroundAI() {
   if (!originalImage) return;
 
-  showOverlay("AI 模型加载中，首次使用需下载模型（约 30MB）...");
+  showOverlay("AI 模型加载中，首次使用需下载模型...");
 
   try {
-    const blob = await imglyRemoveBackground(originalImage.src, {
-      progress: (key, current, total) => {
-        if (key === "compute:inference") {
-          const pct = total > 0 ? Math.round((current / total) * 100) : 0;
-          showOverlay(`正在推理抠图... ${pct}%`);
+    const blob = await rembgRemove(originalImage, {
+      model: "silueta",
+      progress: (progress) => {
+        const pct = Math.round(progress);
+        if (pct < 100) {
+          showOverlay(`正在处理... ${pct}%`);
         } else {
-          showOverlay(`加载模型资源中...`);
+          showOverlay("处理完成，正在渲染...");
         }
       },
     });
-
-    showOverlay("处理完成，正在渲染...");
 
     const resultImg = new Image();
     resultImg.src = URL.createObjectURL(blob);
