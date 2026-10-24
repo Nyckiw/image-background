@@ -27,12 +27,21 @@ const MODEL_CONFIGS = {
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
+const SIZE_PRESETS = {
+  original: { label: "原大小", width: null, height: null },
+  "1inch": { label: "1寸", width: 295, height: 413 },
+  "2inch": { label: "2寸", width: 413, height: 579 },
+  big1inch: { label: "大1寸", width: 390, height: 567 },
+  small2inch: { label: "小2寸", width: 413, height: 526 },
+};
+
 let originalImage = null;
 let foregroundImageData = null;
 let currentPreviewTab = "result";
 let isPickMode = false;
 let bgImageSrc = null;
 let rmbgSession = null;
+let selectedSize = "original";
 
 const mainCanvas = $("#mainCanvas");
 const mainCtx = mainCanvas.getContext("2d", { willReadFrequently: true });
@@ -144,37 +153,107 @@ function updatePreview() {
 
   const w = originalImage.width;
   const h = originalImage.height;
-  const scale = Math.min(size / w, size / h);
-  const dw = w * scale;
-  const dh = h * scale;
+
+  const preset = SIZE_PRESETS[selectedSize];
+  const usePreset = preset && preset.width && preset.height;
+  const targetW = usePreset ? preset.width : w;
+  const targetH = usePreset ? preset.height : h;
+
+  const previewScale = Math.min(size / targetW, size / targetH);
+  const dw = targetW * previewScale;
+  const dh = targetH * previewScale;
   const dx = (size - dw) / 2;
   const dy = (size - dh) / 2;
 
   previewCtx.clearRect(0, 0, size, size);
 
+  function drawResultToPreview() {
+    drawCheckerboard(previewCtx, size, size);
+
+    if (foregroundImageData) {
+      const bgType = document.querySelector('input[name="bgType"]:checked').value;
+
+      if (bgType === "color") {
+        previewCtx.fillStyle = $("#bgColor").value;
+        previewCtx.fillRect(dx, dy, dw, dh);
+      } else if (bgType === "gradient") {
+        previewCtx.save();
+        previewCtx.beginPath();
+        previewCtx.rect(dx, dy, dw, dh);
+        previewCtx.clip();
+        const gradCanvas = document.createElement("canvas");
+        gradCanvas.width = targetW;
+        gradCanvas.height = targetH;
+        drawGradient(gradCanvas.getContext("2d"), targetW, targetH);
+        previewCtx.drawImage(gradCanvas, dx, dy, dw, dh);
+        previewCtx.restore();
+      }
+
+      const tempCanvas = document.createElement("canvas");
+      tempCanvas.width = w;
+      tempCanvas.height = h;
+      const tempCtx = tempCanvas.getContext("2d");
+      tempCtx.putImageData(foregroundImageData, 0, 0);
+
+      const fitScale = Math.min(targetW / w, targetH / h);
+      const fitW = w * fitScale;
+      const fitH = h * fitScale;
+      const fitX = (targetW - fitW) / 2;
+      const fitY = (targetH - fitH) / 2;
+
+      const resultCanvas = document.createElement("canvas");
+      resultCanvas.width = targetW;
+      resultCanvas.height = targetH;
+      const resultCtx = resultCanvas.getContext("2d");
+      resultCtx.drawImage(tempCanvas, fitX, fitY, fitW, fitH);
+
+      previewCtx.drawImage(resultCanvas, dx, dy, dw, dh);
+    } else {
+      const fitScale = Math.min(targetW / w, targetH / h);
+      const fitW = w * fitScale;
+      const fitH = h * fitScale;
+      const fitX = (targetW - fitW) / 2;
+      const fitY = (targetH - fitH) / 2;
+
+      const resultCanvas = document.createElement("canvas");
+      resultCanvas.width = targetW;
+      resultCanvas.height = targetH;
+      const resultCtx = resultCanvas.getContext("2d");
+      resultCtx.drawImage(originalImage, fitX, fitY, fitW, fitH);
+
+      previewCtx.drawImage(resultCanvas, dx, dy, dw, dh);
+    }
+  }
+
   if (currentPreviewTab === "original") {
-    previewCtx.drawImage(originalImage, dx, dy, dw, dh);
+    const origScale = Math.min(size / w, size / h);
+    const origDw = w * origScale;
+    const origDh = h * origScale;
+    const origDx = (size - origDw) / 2;
+    const origDy = (size - origDh) / 2;
+    previewCtx.drawImage(originalImage, origDx, origDy, origDw, origDh);
   } else if (currentPreviewTab === "compare") {
     previewCtx.save();
     previewCtx.beginPath();
     previewCtx.rect(dx, dy, dw / 2, dh);
     previewCtx.clip();
-    previewCtx.drawImage(originalImage, dx, dy, dw, dh);
+    const origScale = Math.min(targetW / w, targetH / h);
+    const origFitW = w * origScale;
+    const origFitH = h * origScale;
+    const origFitX = (targetW - origFitW) / 2;
+    const origFitY = (targetH - origFitH) / 2;
+    const origCanvas = document.createElement("canvas");
+    origCanvas.width = targetW;
+    origCanvas.height = targetH;
+    origCanvas.getContext("2d").drawImage(originalImage, origFitX, origFitY, origFitW, origFitH);
+    previewCtx.drawImage(origCanvas, dx, dy, dw, dh);
     previewCtx.restore();
 
     previewCtx.save();
     previewCtx.beginPath();
     previewCtx.rect(dx + dw / 2, dy, dw / 2, dh);
     previewCtx.clip();
-    drawCheckerboard(previewCtx, size, size);
-    if (foregroundImageData) {
-      const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = w;
-      tempCanvas.height = h;
-      const tempCtx = tempCanvas.getContext("2d");
-      tempCtx.putImageData(foregroundImageData, 0, 0);
-      previewCtx.drawImage(tempCanvas, dx, dy, dw, dh);
-    }
+    drawResultToPreview();
     previewCtx.restore();
 
     previewCtx.strokeStyle = "#fff";
@@ -192,17 +271,7 @@ function updatePreview() {
     previewCtx.fillText("原图", dx + 8, dy + dh - 8);
     previewCtx.fillText("结果", dx + dw - 42, dy + dh - 8);
   } else {
-    drawCheckerboard(previewCtx, size, size);
-    if (foregroundImageData) {
-      const tempCanvas = document.createElement("canvas");
-      tempCanvas.width = w;
-      tempCanvas.height = h;
-      const tempCtx = tempCanvas.getContext("2d");
-      tempCtx.putImageData(foregroundImageData, 0, 0);
-      previewCtx.drawImage(tempCanvas, dx, dy, dw, dh);
-    } else {
-      previewCtx.drawImage(originalImage, dx, dy, dw, dh);
-    }
+    drawResultToPreview();
   }
 }
 
@@ -351,11 +420,34 @@ function downloadResult() {
   const ext = bgType === "transparent" && foregroundImageData ? "png" : "png";
   const mime = "image/png";
 
-  exportCanvas.toBlob((blob) => {
+  const preset = SIZE_PRESETS[selectedSize];
+  const finalCanvas = exportCanvas;
+
+  if (preset && preset.width && preset.height) {
+    const resizedCanvas = document.createElement("canvas");
+    resizedCanvas.width = preset.width;
+    resizedCanvas.height = preset.height;
+    const resizedCtx = resizedCanvas.getContext("2d");
+
+    const scale = Math.min(preset.width / w, preset.height / h);
+    const dw = w * scale;
+    const dh = h * scale;
+    const dx = (preset.width - dw) / 2;
+    const dy = (preset.height - dh) / 2;
+
+    resizedCtx.drawImage(exportCanvas, dx, dy, dw, dh);
+    finalCanvas.width = resizedCanvas.width;
+    finalCanvas.height = resizedCanvas.height;
+    finalCanvas.getContext("2d").drawImage(resizedCanvas, 0, 0);
+  }
+
+  const sizeLabel = preset ? preset.label : "original";
+
+  finalCanvas.toBlob((blob) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `background-changed.${ext}`;
+    a.download = `background-changed-${sizeLabel}.${ext}`;
     a.click();
     URL.revokeObjectURL(url);
   }, mime);
@@ -521,6 +613,15 @@ function setupEvents() {
   });
 
   $("#btnDownload").addEventListener("click", downloadResult);
+
+  $$(".size-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      $$(".size-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedSize = btn.dataset.size;
+      updatePreview();
+    });
+  });
 
   window.addEventListener("resize", () => {
     if (originalImage) updatePreview();

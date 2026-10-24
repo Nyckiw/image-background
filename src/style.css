@@ -435,6 +435,52 @@ body {
   max-height: 100%;
 }
 
+.size-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.size-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-tertiary);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.size-btn:hover {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.size-btn.active {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.size-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.size-btn.active .size-label {
+  color: var(--primary);
+}
+
+.size-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
 .checkerboard-bg {
   font-size: 11px;
   color: var(--text-secondary);
