@@ -1,17 +1,24 @@
 # Third-Party Notices
 
-## IMG.LY Background Removal
+## @planby-tech/rmbg-webgpu
 
-This project uses the `@imgly/background-removal` npm package.
+This project uses the `@planby-tech/rmbg-webgpu` npm package.
 
-- Upstream project: https://github.com/imgly/background-removal-js
-- Package: https://www.npmjs.com/package/@imgly/background-removal
-- License: GNU Affero General Public License v3.0 (AGPL-3.0)
-- Copyright: IMG.LY GmbH and other respective copyright holders
+- Upstream project: https://github.com/planby-technologies/rmbg-webgpu
+- Package: https://www.npmjs.com/package/@planby-tech/rmbg-webgpu
+- License: MIT + Apache-2.0
+  - Library source code: MIT
+  - Bundled model `u2netp.onnx`: Apache License 2.0 (via the U²-Net project)
+  - Optional model BiRefNet: MIT (via the BiRefNet project)
 
-The package is used for AI-powered image background removal. This project adds a certificate-photo background replacement interface and related image editing functionality.
+The package is used for AI-powered image background removal with WebGPU acceleration and WASM fallback.
 
-The upstream project's license and copyright notices must be preserved as applicable.
+## Model Licenses
+
+| Model | License | Commercial Use |
+|-------|---------|----------------|
+| U2NetP (default, ~4MB) | Apache-2.0 | Yes |
+| BiRefNet (optional, ~98MB) | MIT | Yes |
 
 ## Other Third-Party Dependencies
 

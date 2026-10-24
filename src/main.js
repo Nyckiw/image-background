@@ -1,4 +1,28 @@
-import { removeBackground as imglyRemoveBackground } from "@imgly/background-removal";
+import { RmbgSession } from "@planby-tech/rmbg-webgpu";
+import u2netpModelUrl from "@planby-tech/rmbg-webgpu/models/u2netp.onnx?url";
+
+const AI_MODEL = "u2netp";
+// const AI_MODEL = "birefnet";
+// ──────────────────────────────────────────────
+// 模型配置（修改此处即可切换模型）：
+//   "u2netp"  → 快速模式，~4MB，秒级加载，精度良好（默认）
+//   "birefnet" → 高质量模式，~94MB，首次加载较慢，精度更优
+// ──────────────────────────────────────────────
+
+const MODEL_CONFIGS = {
+  u2netp: { model: "u2netp", modelUrl: u2netpModelUrl },
+  birefnet: {
+    model: {
+      inputSize: 512,
+      mean: [0.485, 0.456, 0.406],
+      std: [0.229, 0.224, 0.225],
+      normalization: "unit",
+      outputTransform: "sigmoid",
+      inputTensorType: "float32",
+    },
+    modelUrl: "/hf-mirror/studioludens/birefnet-lite-512/resolve/main/onnx/model_fp16.onnx",
+  },
+};
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -8,6 +32,7 @@ let foregroundImageData = null;
 let currentPreviewTab = "result";
 let isPickMode = false;
 let bgImageSrc = null;
+let rmbgSession = null;
 
 const mainCanvas = $("#mainCanvas");
 const mainCtx = mainCanvas.getContext("2d", { willReadFrequently: true });
@@ -202,27 +227,32 @@ async function handleFile(file) {
   renderCanvas();
 }
 
+async function getRmbgSession() {
+  if (!rmbgSession) {
+    const config = MODEL_CONFIGS[AI_MODEL] || MODEL_CONFIGS.u2netp;
+    const modelLabel = AI_MODEL === "birefnet" ? "BiRefNet-Lite 高质量 (~94MB)" : "U2NetP 快速 (~4MB)";
+    showOverlay(`正在加载 AI 模型 (${modelLabel})，首次使用需下载...`);
+    rmbgSession = await RmbgSession.create(config);
+  }
+  return rmbgSession;
+}
+
 async function removeBackgroundAI() {
   if (!originalImage) return;
 
-  showOverlay("AI 模型加载中，首次使用需下载模型（约 30MB）...");
-
   try {
-    const blob = await imglyRemoveBackground(originalImage.src, {
-      progress: (key, current, total) => {
-        if (key === "compute:inference") {
-          const pct = total > 0 ? Math.round((current / total) * 100) : 0;
-          showOverlay(`正在推理抠图... ${pct}%`);
-        } else {
-          showOverlay(`加载模型资源中...`);
-        }
-      },
-    });
+    const session = await getRmbgSession();
+    showOverlay("正在推理抠图...");
+
+    const response = await fetch(originalImage.src);
+    const imageBlob = await response.blob();
+    const result = await session.remove(imageBlob);
+    const resultBlob = result.outputBlob;
 
     showOverlay("处理完成，正在渲染...");
 
     const resultImg = new Image();
-    resultImg.src = URL.createObjectURL(blob);
+    resultImg.src = URL.createObjectURL(resultBlob);
     await new Promise((resolve) => {
       resultImg.onload = resolve;
     });

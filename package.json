@@ -10,9 +10,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "AGPL-3.0-only",
+  "license": "MIT",
   "dependencies": {
-    "@imgly/background-removal": "^1.7.0"
+    "@planby-tech/rmbg-webgpu": "^0.2.1"
   },
   "devDependencies": {
     "vite": "^8.3.5"
