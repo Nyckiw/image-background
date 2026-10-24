@@ -1,8 +1,8 @@
 import { RmbgSession } from "@planby-tech/rmbg-webgpu";
 import u2netpModelUrl from "@planby-tech/rmbg-webgpu/models/u2netp.onnx?url";
 
-const AI_MODEL = "u2netp";
-// const AI_MODEL = "birefnet";
+// const AI_MODEL = "u2netp";
+const AI_MODEL = "birefnet";
 // ──────────────────────────────────────────────
 // 模型配置（修改此处即可切换模型）：
 //   "u2netp"  → 快速模式，~4MB，秒级加载，精度良好（默认）
@@ -20,7 +20,7 @@ const MODEL_CONFIGS = {
       outputTransform: "sigmoid",
       inputTensorType: "float32",
     },
-    modelUrl: "/hf-mirror/studioludens/birefnet-lite-512/resolve/main/onnx/model_fp16.onnx",
+    modelUrl: "/birefnet-lite-fp16.onnx",
   },
 };
 
