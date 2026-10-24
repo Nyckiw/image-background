@@ -1,4 +1,34 @@
-import { remove as rembgRemove } from "@bunnio/rembg-web";
+import { AutoModel, AutoProcessor, RawImage, env } from "@huggingface/transformers";
+
+const MIRROR_HOSTS = [
+  { url: "https://hf-mirror.com/", name: "hf-mirror" },
+  { url: "https://hf-api.gitee.com/", name: "Gitee" },
+  { url: "https://huggingface.co/", name: "HuggingFace" },
+];
+
+const PROXY_MAP = {
+  "https://hf-mirror.com/": "/hf-mirror/",
+  "https://hf-api.gitee.com/": "/hf-gitee/",
+  "https://huggingface.co/": "/hf-official/",
+};
+
+const originalFetch = env.fetch;
+env.fetch = (url, options) => {
+  const urlStr = String(url);
+  for (const [remote, proxy] of Object.entries(PROXY_MAP)) {
+    if (urlStr.startsWith(remote)) {
+      const proxiedUrl = urlStr.replace(remote, proxy);
+      console.log(`[proxy] ${urlStr} → ${proxiedUrl}`);
+      return originalFetch(proxiedUrl, options);
+    }
+  }
+  return originalFetch(url, options);
+};
+
+const MODEL_ID = "studioludens/birefnet-lite-512";
+
+let model = null;
+let processor = null;
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -202,43 +232,124 @@ async function handleFile(file) {
   renderCanvas();
 }
 
+function createProgressCallback(prefix) {
+  return (progress) => {
+    if (progress.status === "download" && progress.progress) {
+      const pct = Math.round(progress.progress);
+      showOverlay(`${prefix} ${pct}%`);
+    } else if (progress.status === "ready") {
+      showOverlay(`${prefix}完成，正在初始化...`);
+    }
+  };
+}
+
+async function tryWithMirrors(fn) {
+  let lastError = null;
+  for (const mirror of MIRROR_HOSTS) {
+    env.remoteHost = mirror.url;
+    try {
+      showOverlay(`正在从 ${mirror.name} 镜像加载...`);
+      return await fn(mirror);
+    } catch (err) {
+      lastError = err;
+      console.warn(`${mirror.name} 镜像加载失败:`, err);
+    }
+  }
+  throw lastError;
+}
+
+async function loadModel() {
+  if (model && processor) return;
+
+  showOverlay("正在加载 AI 模型，首次使用需从网络下载（约 98MB）...");
+
+  if (!processor) {
+    processor = await tryWithMirrors(async (mirror) => {
+      return await AutoProcessor.from_pretrained(MODEL_ID, {
+        progress_callback: createProgressCallback(`[${mirror.name}] 下载处理器...`),
+      });
+    });
+  }
+
+  if (!model) {
+    try {
+      model = await tryWithMirrors(async (mirror) => {
+        return await AutoModel.from_pretrained(MODEL_ID, {
+          device: "webgpu",
+          dtype: "fp16",
+          progress_callback: createProgressCallback(`[${mirror.name}] 下载模型(WebGPU)...`),
+        });
+      });
+    } catch (err) {
+      console.warn("WebGPU 加载失败，回退到 WASM 模式:", err);
+      showOverlay("正在回退到 WASM 模式加载模型...");
+      model = await tryWithMirrors(async (mirror) => {
+        return await AutoModel.from_pretrained(MODEL_ID, {
+          device: "wasm",
+          dtype: "fp32",
+          progress_callback: createProgressCallback(`[${mirror.name}] 下载模型(WASM)...`),
+        });
+      });
+    }
+  }
+}
+
 async function removeBackgroundAI() {
   if (!originalImage) return;
 
-  showOverlay("AI 模型加载中，首次使用需下载模型...");
-
   try {
-    const blob = await rembgRemove(originalImage, {
-      model: "silueta",
-      progress: (progress) => {
-        const pct = Math.round(progress);
-        if (pct < 100) {
-          showOverlay(`正在处理... ${pct}%`);
-        } else {
-          showOverlay("处理完成，正在渲染...");
-        }
-      },
-    });
+    await loadModel();
 
-    const resultImg = new Image();
-    resultImg.src = URL.createObjectURL(blob);
-    await new Promise((resolve) => {
-      resultImg.onload = resolve;
-    });
+    showOverlay("正在处理图片...");
 
-    const w = originalImage.width;
-    const h = originalImage.height;
-    const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = w;
-    tempCanvas.height = h;
-    const tempCtx = tempCanvas.getContext("2d");
-    tempCtx.drawImage(resultImg, 0, 0, w, h);
-    foregroundImageData = tempCtx.getImageData(0, 0, w, h);
+    const canvas = document.createElement("canvas");
+    canvas.width = originalImage.width;
+    canvas.height = originalImage.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(originalImage, 0, 0);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+    const image = await RawImage.fromBlob(blob);
 
+    const { pixel_values } = await processor(image);
+    const { logits } = await model({ input_image: pixel_values });
+
+    const maskData = await RawImage.fromTensor(
+      logits[0].sigmoid().mul(255).to("uint8")
+    ).resize(originalImage.width, originalImage.height);
+
+    const maskCanvas = document.createElement("canvas");
+    maskCanvas.width = originalImage.width;
+    maskCanvas.height = originalImage.height;
+    const maskCtx = maskCanvas.getContext("2d");
+    const maskImgData = maskCtx.createImageData(originalImage.width, originalImage.height);
+
+    const origCanvas = document.createElement("canvas");
+    origCanvas.width = originalImage.width;
+    origCanvas.height = originalImage.height;
+    const origCtx = origCanvas.getContext("2d");
+    origCtx.drawImage(originalImage, 0, 0);
+    const origImgData = origCtx.getImageData(0, 0, originalImage.width, originalImage.height);
+
+    const maskPixels = maskData.data;
+    const origPixels = origImgData.data;
+
+    for (let i = 0; i < origPixels.length; i += 4) {
+      maskImgData.data[i] = origPixels[i];
+      maskImgData.data[i + 1] = origPixels[i + 1];
+      maskImgData.data[i + 2] = origPixels[i + 2];
+      maskImgData.data[i + 3] = maskPixels[i];
+    }
+
+    foregroundImageData = maskImgData;
     renderCanvas();
   } catch (err) {
     console.error("背景去除失败:", err);
-    alert("背景去除失败，请重试或换一张图片。\n" + err.message);
+    const msg = err.message || String(err);
+    if (msg.includes("fetch") || msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("Load failed")) {
+      alert("背景去除失败：无法连接模型服务器。\n所有镜像源均不可用，请检查网络连接后重试。");
+    } else {
+      alert("背景去除失败，请重试或换一张图片。\n" + msg);
+    }
   } finally {
     hideOverlay();
   }
@@ -316,15 +427,13 @@ function downloadResult() {
     exportCtx.drawImage(originalImage, 0, 0);
   }
 
-  const bgType = document.querySelector('input[name="bgType"]:checked').value;
-  const ext = bgType === "transparent" && foregroundImageData ? "png" : "png";
   const mime = "image/png";
 
   exportCanvas.toBlob((blob) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `background-changed.${ext}`;
+    a.download = "background-changed.png";
     a.click();
     URL.revokeObjectURL(url);
   }, mime);
