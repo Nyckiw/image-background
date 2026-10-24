@@ -6,7 +6,7 @@ const AI_MODEL = "birefnet";
 // ──────────────────────────────────────────────
 // 模型配置（修改此处即可切换模型）：
 //   "u2netp"  → 快速模式，~4MB，秒级加载，精度良好（默认）
-//   "birefnet" → 高质量模式，~94MB，首次加载较慢，精度更优
+//   "birefnet" → 高质量模式，~183MB，首次加载较慢，精度更优
 // ──────────────────────────────────────────────
 
 const MODEL_CONFIGS = {
@@ -20,7 +20,7 @@ const MODEL_CONFIGS = {
       outputTransform: "sigmoid",
       inputTensorType: "float32",
     },
-    modelUrl: "/birefnet-lite-fp16.onnx",
+    modelUrl: "/birefnet-lite-512-fp32.onnx",
   },
 };
 
@@ -230,7 +230,7 @@ async function handleFile(file) {
 async function getRmbgSession() {
   if (!rmbgSession) {
     const config = MODEL_CONFIGS[AI_MODEL] || MODEL_CONFIGS.u2netp;
-    const modelLabel = AI_MODEL === "birefnet" ? "BiRefNet-Lite 高质量 (~94MB)" : "U2NetP 快速 (~4MB)";
+    const modelLabel = AI_MODEL === "birefnet" ? "BiRefNet-Lite 512 FP32 (~183MB)" : "U2NetP 快速 (~4MB)";
     showOverlay(`正在加载 AI 模型 (${modelLabel})，首次使用需下载...`);
     rmbgSession = await RmbgSession.create(config);
   }
