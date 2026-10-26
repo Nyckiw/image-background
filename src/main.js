@@ -1,5 +1,6 @@
 import { RmbgSession } from "@planby-tech/rmbg-webgpu";
 import u2netpModelUrl from "@planby-tech/rmbg-webgpu/models/u2netp.onnx?url";
+import JSZip from "jszip";
 
 // const AI_MODEL = "u2netp";
 const AI_MODEL = "birefnet";
@@ -629,3 +630,336 @@ function setupEvents() {
 }
 
 setupEvents();
+
+// ──────────────────────────────────────────────
+// 页面路由
+// ──────────────────────────────────────────────
+const PAGES = ["home", "specs", "guide", "batch", "faq"];
+const PAGE_MAP = {
+  home: "#pageHome",
+  specs: "#pageSpecs",
+  guide: "#pageGuide",
+  batch: "#pageBatch",
+  faq: "#pageFaq",
+};
+
+function getCurrentPage() {
+  const hash = location.hash.replace("#", "");
+  return PAGES.includes(hash) ? hash : "home";
+}
+
+function switchPage(page) {
+  PAGES.forEach((p) => {
+    const el = document.querySelector(PAGE_MAP[p]);
+    if (el) el.classList.toggle("hidden", p !== page);
+  });
+
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.classList.toggle("active", link.dataset.page === page);
+  });
+
+  if (page !== "home") {
+    document.querySelector(PAGE_MAP.home).classList.add("hidden");
+  }
+}
+
+window.addEventListener("hashchange", () => {
+  switchPage(getCurrentPage());
+});
+
+document.querySelectorAll(".nav-link").forEach((link) => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const page = link.dataset.page;
+    location.hash = page;
+    switchPage(page);
+    const nav = document.querySelector(".nav");
+    if (nav) nav.classList.remove("open");
+  });
+});
+
+document.querySelector(".header-brand")?.addEventListener("click", () => {
+  location.hash = "home";
+  switchPage("home");
+});
+
+document.querySelector("#navToggle")?.addEventListener("click", () => {
+  document.querySelector(".nav")?.classList.toggle("open");
+});
+
+switchPage(getCurrentPage());
+
+// ──────────────────────────────────────────────
+// 批量换底
+// ──────────────────────────────────────────────
+let batchFiles = [];
+let batchResults = [];
+let batchBgColor = "#ffffff";
+
+async function getBatchRmbgSession() {
+  if (!rmbgSession) {
+    const config = MODEL_CONFIGS[AI_MODEL] || MODEL_CONFIGS.u2netp;
+    const modelLabel = AI_MODEL === "birefnet" ? "BiRefNet-Lite (~183MB)" : "U2NetP (~4MB)";
+    const progressText = document.querySelector("#batchProgressText");
+    if (progressText) progressText.textContent = `正在加载 AI 模型 (${modelLabel})，首次需下载...`;
+    rmbgSession = await RmbgSession.create(config);
+  }
+  return rmbgSession;
+}
+
+function setupBatchEvents() {
+  const area = document.querySelector("#batchUploadArea");
+  const input = document.querySelector("#batchFileInput");
+  if (!area || !input) return;
+
+  area.addEventListener("click", () => input.click());
+
+  area.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    area.classList.add("dragover");
+  });
+
+  area.addEventListener("dragleave", () => area.classList.remove("dragover"));
+
+  area.addEventListener("drop", (e) => {
+    e.preventDefault();
+    area.classList.remove("dragover");
+    addBatchFiles(e.dataTransfer.files);
+  });
+
+  input.addEventListener("change", (e) => {
+    addBatchFiles(e.target.files);
+    input.value = "";
+  });
+
+  document.querySelectorAll(".batch-color-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".batch-color-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      batchBgColor = btn.dataset.color;
+      const customInput = document.querySelector("#batchCustomColor");
+      const customText = document.querySelector("#batchCustomColorText");
+      if (batchBgColor !== "transparent" && customInput) {
+        customInput.value = batchBgColor;
+        if (customText) customText.value = batchBgColor;
+      }
+    });
+  });
+
+  document.querySelector("#batchCustomColor")?.addEventListener("input", (e) => {
+    batchBgColor = e.target.value;
+    const customText = document.querySelector("#batchCustomColorText");
+    if (customText) customText.value = e.target.value;
+    document.querySelectorAll(".batch-color-btn").forEach((b) => b.classList.remove("active"));
+  });
+
+  document.querySelector("#batchCustomColorText")?.addEventListener("input", (e) => {
+    if (/^#[0-9a-fA-F]{6}$/.test(e.target.value)) {
+      batchBgColor = e.target.value;
+      const customInput = document.querySelector("#batchCustomColor");
+      if (customInput) customInput.value = e.target.value;
+      document.querySelectorAll(".batch-color-btn").forEach((b) => b.classList.remove("active"));
+    }
+  });
+
+  document.querySelector("#btnBatchProcess")?.addEventListener("click", processBatch);
+  document.querySelector("#btnBatchDownload")?.addEventListener("click", downloadBatchAsZip);
+  document.querySelector("#btnBatchClear")?.addEventListener("click", clearBatch);
+}
+
+function addBatchFiles(fileList) {
+  for (const file of fileList) {
+    if (!file.type.startsWith("image/")) continue;
+    batchFiles.push({ file, status: "pending", result: null });
+  }
+  renderBatchList();
+  document.querySelector("#batchSettings")?.classList.remove("hidden");
+  document.querySelector("#batchActions")?.classList.remove("hidden");
+}
+
+function renderBatchList() {
+  const list = document.querySelector("#batchPreviewList");
+  if (!list) return;
+  list.innerHTML = "";
+
+  batchFiles.forEach((item, idx) => {
+    const div = document.createElement("div");
+    div.className = "batch-preview-item";
+
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(item.file);
+    div.appendChild(img);
+
+    const status = document.createElement("div");
+    status.className = `batch-item-status ${item.status}`;
+    const statusText = { pending: "等待处理", processing: "处理中...", done: "已完成", error: "失败" };
+    status.textContent = statusText[item.status] || item.status;
+    div.appendChild(status);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "batch-item-remove";
+    removeBtn.textContent = "×";
+    removeBtn.addEventListener("click", () => {
+      batchFiles.splice(idx, 1);
+      renderBatchList();
+      if (batchFiles.length === 0) {
+        document.querySelector("#batchSettings")?.classList.add("hidden");
+        document.querySelector("#batchActions")?.classList.add("hidden");
+      }
+    });
+    div.appendChild(removeBtn);
+
+    list.appendChild(div);
+  });
+}
+
+async function processBatch() {
+  if (batchFiles.length === 0) return;
+
+  const progressEl = document.querySelector("#batchProgress");
+  const progressFill = document.querySelector("#batchProgressFill");
+  const progressText = document.querySelector("#batchProgressText");
+
+  progressEl?.classList.remove("hidden");
+  if (progressFill) progressFill.style.width = "0%";
+  document.querySelector("#btnBatchProcess").disabled = true;
+
+  const sizeKey = document.querySelector("#batchSizeSelect")?.value || "original";
+  const preset = SIZE_PRESETS[sizeKey];
+
+  let session;
+  try {
+    session = await getBatchRmbgSession();
+  } catch (err) {
+    console.error("AI 模型加载失败:", err);
+    if (progressText) progressText.textContent = `AI 模型加载失败: ${err.message}`;
+    document.querySelector("#btnBatchProcess").disabled = false;
+    return;
+  }
+
+  batchResults = [];
+
+  for (let i = 0; i < batchFiles.length; i++) {
+    batchFiles[i].status = "processing";
+    renderBatchList();
+    if (progressText) progressText.textContent = `AI 抠图 ${i + 1}/${batchFiles.length}...`;
+
+    try {
+      const origImg = new Image();
+      const origUrl = URL.createObjectURL(batchFiles[i].file);
+      origImg.src = origUrl;
+      await new Promise((r, reject) => { origImg.onload = r; origImg.onerror = reject; });
+
+      const w = origImg.width;
+      const h = origImg.height;
+
+      const result = await session.remove(batchFiles[i].file);
+      const resultBlob = result.outputBlob;
+
+      const resultImg = new Image();
+      resultImg.src = URL.createObjectURL(resultBlob);
+      await new Promise((r, reject) => { resultImg.onload = r; resultImg.onerror = reject; });
+
+      const fgCanvas = document.createElement("canvas");
+      fgCanvas.width = w;
+      fgCanvas.height = h;
+      fgCanvas.getContext("2d").drawImage(resultImg, 0, 0, w, h);
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+
+      if (batchBgColor !== "transparent") {
+        ctx.fillStyle = batchBgColor;
+        ctx.fillRect(0, 0, w, h);
+      } else {
+        ctx.clearRect(0, 0, w, h);
+      }
+
+      ctx.drawImage(fgCanvas, 0, 0);
+
+      let finalCanvas = canvas;
+      if (preset && preset.width && preset.height) {
+        finalCanvas = document.createElement("canvas");
+        finalCanvas.width = preset.width;
+        finalCanvas.height = preset.height;
+        const fCtx = finalCanvas.getContext("2d");
+        const scale = Math.min(preset.width / w, preset.height / h);
+        const dw = w * scale;
+        const dh = h * scale;
+        const dx = (preset.width - dw) / 2;
+        const dy = (preset.height - dh) / 2;
+        fCtx.drawImage(canvas, dx, dy, dw, dh);
+      }
+
+      const outBlob = await new Promise((r) => finalCanvas.toBlob(r, "image/png"));
+      batchResults.push({ blob: outBlob, name: batchFiles[i].file.name.replace(/\.\w+$/, "") + "_processed.png" });
+      batchFiles[i].status = "done";
+
+      URL.revokeObjectURL(origUrl);
+    } catch (err) {
+      console.error("批量处理第" + (i + 1) + "张失败:", err);
+      batchFiles[i].status = "error";
+      batchFiles[i].errorMsg = err.message;
+    }
+
+    if (progressFill) progressFill.style.width = `${((i + 1) / batchFiles.length) * 100}%`;
+    renderBatchList();
+  }
+
+  if (progressText) progressText.textContent = `处理完成！成功 ${batchResults.length}/${batchFiles.length}`;
+  document.querySelector("#btnBatchProcess").disabled = false;
+  if (batchResults.length > 0) {
+    document.querySelector("#btnBatchDownload")?.classList.remove("hidden");
+  }
+}
+
+async function downloadBatchAsZip() {
+  if (batchResults.length === 0) return;
+
+  const btn = document.querySelector("#btnBatchDownload");
+  const originalText = btn?.textContent;
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "📦 正在打包...";
+  }
+
+  try {
+    const zip = new JSZip();
+    const folderName = `证件照批量结果_${new Date().toISOString().slice(0, 10).replace(/-/g, "")}`;
+    const folder = zip.folder(folderName);
+
+    for (const item of batchResults) {
+      folder.file(item.name, item.blob);
+    }
+
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${folderName}.zip`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("打包下载失败:", err);
+    alert("打包下载失败: " + err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = originalText || "💾 打包下载全部";
+    }
+  }
+}
+
+function clearBatch() {
+  batchFiles = [];
+  batchResults = [];
+  renderBatchList();
+  document.querySelector("#batchSettings")?.classList.add("hidden");
+  document.querySelector("#batchActions")?.classList.add("hidden");
+  document.querySelector("#btnBatchDownload")?.classList.add("hidden");
+  document.querySelector("#batchProgress")?.classList.add("hidden");
+}
+
+setupBatchEvents();

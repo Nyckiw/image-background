@@ -9,11 +9,24 @@
 <body>
   <div id="app">
     <header class="header">
-      <h1>🖼️ 图片背景更换</h1>
+      <div class="header-top">
+        <div class="header-brand" data-page="home">
+          <h1>🖼️ 证件照工坊</h1>
+        </div>
+        <nav class="nav">
+          <a class="nav-link active" href="#home" data-page="home">🏠 首页</a>
+          <a class="nav-link" href="#specs" data-page="specs">📐 证件照规格</a>
+          <a class="nav-link" href="#guide" data-page="guide">📷 拍摄指南</a>
+          <a class="nav-link" href="#batch" data-page="batch">📦 批量换底</a>
+          <a class="nav-link" href="#faq" data-page="faq">❓ 常见问题</a>
+        </nav>
+        <button class="nav-toggle" id="navToggle">☰</button>
+      </div>
       <p class="subtitle">纯前端 AI 抠图 · 无需上传服务器 · 隐私安全</p>
     </header>
 
     <main class="main">
+      <section class="page page-home" id="pageHome">
       <section class="upload-section" id="uploadSection">
         <input type="file" id="fileInput" accept="image/*" hidden />
         <div class="upload-area" id="uploadArea">
@@ -184,6 +197,415 @@
               </div>
               <div class="checkerboard-bg" id="checkerboardHint">
                 棋盘格 = 透明区域
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      </section>
+
+      <section class="page page-specs hidden" id="pageSpecs">
+        <div class="page-content">
+          <h2 class="page-title">📐 证件照规格一览</h2>
+          <p class="page-desc">不同场景对证件照的尺寸、背景色、分辨率要求各不相同，以下是常见规格汇总。</p>
+
+          <div class="spec-category">
+            <h3>🪪 身份证 / 护照类</h3>
+            <table class="spec-table">
+              <thead>
+                <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>居民身份证</td><td>26 × 32</td><td>358 × 441</td><td>白色</td><td>350 dpi</td></tr>
+                <tr><td>中国护照</td><td>33 × 48</td><td>390 × 567</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td>签证照（通用）</td><td>35 × 45</td><td>413 × 531</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td>港澳通行证</td><td>33 × 48</td><td>390 × 567</td><td>白色</td><td>300 dpi</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="spec-category">
+            <h3>🎓 学历 / 考试类</h3>
+            <table class="spec-table">
+              <thead>
+                <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1寸标准</td><td>25 × 35</td><td>295 × 413</td><td>红/蓝/白</td><td>300 dpi</td></tr>
+                <tr><td>2寸标准</td><td>35 × 49</td><td>413 × 579</td><td>红/蓝/白</td><td>300 dpi</td></tr>
+                <tr><td>小1寸</td><td>22 × 32</td><td>260 × 378</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td>小2寸</td><td>35 × 45</td><td>413 × 526</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td>大1寸</td><td>33 × 48</td><td>390 × 567</td><td>红/蓝/白</td><td>300 dpi</td></tr>
+                <tr><td>考研报名</td><td>—</td><td>300 × 400</td><td>白色</td><td>—</td></tr>
+                <tr><td>四六级考试</td><td>—</td><td>144 × 192</td><td>蓝色</td><td>—</td></tr>
+                <tr><td>学信网头像</td><td>—</td><td>480 × 640</td><td>蓝色</td><td>300 dpi</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="spec-category">
+            <h3>💼 职场 / 资格类</h3>
+            <table class="spec-table">
+              <thead>
+                <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>简历照片</td><td>25 × 35</td><td>295 × 413</td><td>蓝/白</td><td>300 dpi</td></tr>
+                <tr><td>教师资格认定</td><td>—</td><td>150 × 200</td><td>白色</td><td>—</td></tr>
+                <tr><td>会计初级</td><td>—</td><td>295 × 413</td><td>白色</td><td>—</td></tr>
+                <tr><td>一级建造师</td><td>25 × 35</td><td>295 × 413</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td>执业医师</td><td>25 × 35</td><td>295 × 413</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td>社保卡</td><td>26 × 32</td><td>358 × 441</td><td>白色</td><td>350 dpi</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="spec-category">
+            <h3>🚗 驾照 / 车辆类</h3>
+            <table class="spec-table">
+              <thead>
+                <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>驾驶证</td><td>22 × 32</td><td>260 × 378</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td>行驶证</td><td>22 × 32</td><td>260 × 378</td><td>白色</td><td>300 dpi</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="spec-tip">
+            <strong>💡 提示：</strong>以上规格仅供参考，具体要求请以办证机构官方通知为准。使用本工具制作证件照时，可在右侧"下载尺寸"面板中选择对应规格，一键导出。
+          </div>
+        </div>
+      </section>
+
+      <section class="page page-guide hidden" id="pageGuide">
+        <div class="page-content">
+          <h2 class="page-title">📷 证件照拍摄指南</h2>
+          <p class="page-desc">一张合格的证件照，拍摄环节至关重要。以下是从准备到拍摄的完整攻略。</p>
+
+          <div class="guide-grid">
+            <div class="guide-card">
+              <div class="guide-card-icon">💡</div>
+              <h3>光线</h3>
+              <ul>
+                <li>使用<strong>均匀柔和的自然光</strong>或柔光灯，避免直射阳光</li>
+                <li>面部左右光线对称，避免一侧阴影</li>
+                <li>推荐<strong>正面顺光</strong>，不要侧光或逆光</li>
+                <li>如用手机闪光灯，保持 1.5m 以上距离，避免过曝</li>
+              </ul>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-card-icon">🧍</div>
+              <h3>姿态</h3>
+              <ul>
+                <li>头部居中，<strong>两耳可见</strong>，不偏不歪</li>
+                <li>双肩水平，身体正对镜头</li>
+                <li>下巴微收，避免仰头或低头</li>
+                <li>双目<strong>正视镜头</strong>，自然睁大</li>
+              </ul>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-card-icon">😊</div>
+              <h3>表情</h3>
+              <ul>
+                <li>表情自然，<strong>嘴唇闭合</strong>，不露齿</li>
+                <li>可微笑但不要夸张</li>
+                <li>眼睛自然睁开，不眯眼</li>
+                <li>部分证件要求<strong>不笑</strong>（如护照），请提前确认</li>
+              </ul>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-card-icon">👔</div>
+              <h3>着装</h3>
+              <ul>
+                <li>穿<strong>深色有领</strong>服装，与背景形成对比</li>
+                <li>白色背景 → 不穿白色/浅色上衣</li>
+                <li>蓝色背景 → 不穿蓝色上衣</li>
+                <li>避免吊带、背心、低胸装</li>
+                <li>制服类证件照需穿对应制服</li>
+              </ul>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-card-icon">💇</div>
+              <h3>发型</h3>
+              <ul>
+                <li>头发不遮住眉毛、耳朵</li>
+                <li>长发建议扎起或置于肩后</li>
+                <li>刘海不能遮住眉毛</li>
+                <li>避免过于蓬松的发型</li>
+              </ul>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-card-icon">👓</div>
+              <h3>配饰</h3>
+              <ul>
+                <li>一般<strong>禁止佩戴帽子</strong></li>
+                <li>眼镜：部分证件允许，但镜片<strong>不能反光</strong></li>
+                <li>不得佩戴有色眼镜、墨镜</li>
+                <li>耳饰、项链等建议取下</li>
+                <li>宗教头饰需特殊申请</li>
+              </ul>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-card-icon">📱</div>
+              <h3>手机拍摄技巧</h3>
+              <ul>
+                <li>使用<strong>后置摄像头</strong>，画质更佳</li>
+                <li>距离 1~1.5m，使用<strong>2x 变焦</strong>减少畸变</li>
+                <li>请他人帮忙拍摄，避免自拍畸变</li>
+                <li>开启网格线辅助居中对齐</li>
+                <li>使用三脚架保持稳定</li>
+              </ul>
+            </div>
+
+            <div class="guide-card">
+              <div class="guide-card-icon">🖼️</div>
+              <h3>背景要求</h3>
+              <ul>
+                <li>背景<strong>纯色、无杂物</strong></li>
+                <li>常见：白色、蓝色(#438EDB)、红色(#FF0000)</li>
+                <li>如背景不纯，可用本工具 AI 去除后替换</li>
+                <li>拍摄时尽量靠墙，减少阴影</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="guide-flow">
+            <h3>📋 完整流程</h3>
+            <div class="flow-steps">
+              <div class="flow-step">
+                <div class="flow-num">1</div>
+                <div class="flow-text">确认证件照规格要求（尺寸、底色）</div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-num">2</div>
+                <div class="flow-text">按指南拍摄原始照片</div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-num">3</div>
+                <div class="flow-text">上传到本工具，AI 去除背景</div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-num">4</div>
+                <div class="flow-text">选择目标背景色</div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-num">5</div>
+                <div class="flow-text">选择输出尺寸规格</div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-num">6</div>
+                <div class="flow-text">下载成品证件照</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page page-batch hidden" id="pageBatch">
+        <div class="page-content">
+          <h2 class="page-title">📦 批量换底</h2>
+          <p class="page-desc">一次性为多张证件照统一更换背景色，省时省力。</p>
+
+          <div class="batch-upload-area" id="batchUploadArea">
+            <div class="batch-upload-icon">📂</div>
+            <p>拖拽多张图片到此处，或点击选择图片</p>
+            <p class="upload-hint">支持同时选择多张 JPG / PNG 图片</p>
+            <input type="file" id="batchFileInput" accept="image/*" multiple hidden />
+          </div>
+
+          <div class="batch-settings hidden" id="batchSettings">
+            <div class="batch-mode-select">
+              <h3>抠图方式</h3>
+              <div class="batch-mode-info">
+                <span class="mode-icon">✂️</span>
+                <span class="mode-label">AI 智能抠图</span>
+                <span class="mode-desc">自动识别前景人物并去除背景，适合各类证件照</span>
+              </div>
+            </div>
+
+            <div class="batch-bg-select">
+              <h3>目标背景色</h3>
+              <div class="batch-colors">
+                <button class="batch-color-btn active" data-color="#ffffff" style="background:#ffffff" title="白色"></button>
+                <button class="batch-color-btn" data-color="#438edb" style="background:#438edb" title="证件蓝"></button>
+                <button class="batch-color-btn" data-color="#67b2e8" style="background:#67b2e8" title="浅蓝"></button>
+                <button class="batch-color-btn" data-color="#1a4c8a" style="background:#1a4c8a" title="深蓝"></button>
+                <button class="batch-color-btn" data-color="#ff0000" style="background:#ff0000" title="红色"></button>
+                <button class="batch-color-btn" data-color="#d70015" style="background:#d70015" title="暗红"></button>
+                <button class="batch-color-btn" data-color="#f5f5dc" style="background:#f5f5dc" title="米色"></button>
+                <button class="batch-color-btn" data-color="#e8e8e8" style="background:#e8e8e8" title="浅灰"></button>
+                <button class="batch-color-btn" data-color="#000000" style="background:#000000" title="黑色"></button>
+                <button class="batch-color-btn" data-color="transparent" style="background:repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 50%/12px 12px" title="透明"></button>
+              </div>
+              <div class="batch-color-custom">
+                <label>自定义颜色：</label>
+                <input type="color" id="batchCustomColor" value="#ffffff" />
+                <input type="text" id="batchCustomColorText" value="#ffffff" maxlength="7" />
+              </div>
+            </div>
+
+            <div class="batch-size-select">
+              <h3>输出尺寸</h3>
+              <select id="batchSizeSelect">
+                <option value="original">原大小</option>
+                <option value="1inch">1寸 (295×413)</option>
+                <option value="2inch">2寸 (413×579)</option>
+                <option value="big1inch">大1寸 (390×567)</option>
+                <option value="small2inch">小2寸 (413×526)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="batch-preview-list" id="batchPreviewList"></div>
+
+          <div class="batch-actions hidden" id="batchActions">
+            <button class="btn btn-primary" id="btnBatchProcess">🚀 开始批量处理</button>
+            <button class="btn btn-success hidden" id="btnBatchDownload">💾 打包下载全部</button>
+            <button class="btn" id="btnBatchClear">🗑️ 清空列表</button>
+          </div>
+
+          <div class="batch-progress hidden" id="batchProgress">
+            <div class="progress-bar">
+              <div class="progress-fill" id="batchProgressFill"></div>
+            </div>
+            <p class="progress-text" id="batchProgressText">处理中... 0/0</p>
+          </div>
+
+          <div class="batch-tip">
+            <strong>💡 说明：</strong>批量处理使用 AI 自动去除背景，每张图片处理约需 2~5 秒。所有操作均在浏览器本地完成，图片不会上传到服务器。
+          </div>
+        </div>
+      </section>
+
+      <section class="page page-faq hidden" id="pageFaq">
+        <div class="page-content">
+          <h2 class="page-title">❓ 常见问题</h2>
+          <p class="page-desc">关于证件照制作和本工具的常见疑问解答。</p>
+
+          <div class="faq-list">
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span>证件照的背景色有哪些要求？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p>常见背景色要求：</p>
+                <ul>
+                  <li><strong>白色</strong>：身份证、护照、驾照、社保卡等大多数证件</li>
+                  <li><strong>蓝色</strong>（约 #438EDB）：毕业证、学位证、四六级、部分资格考试</li>
+                  <li><strong>红色</strong>（约 #FF0000）：部分结婚证、保险、工会等</li>
+                </ul>
+                <p>具体要求请以办证机构通知为准。</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span>AI 抠图和手动取色有什么区别？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p><strong>AI 去除背景</strong>：使用深度学习模型自动识别前景人物，适合背景复杂、颜色不纯的照片。效果更好但处理稍慢。</p>
+                <p><strong>手动取色去除</strong>：点击图片上的背景色，基于颜色容差去除。适合背景颜色单一、与人物颜色差异明显的照片。速度更快。</p>
+                <p>建议优先使用 AI 模式，如对结果不满意可重置后尝试手动模式。</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span>处理后的证件照能直接使用吗？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p>本工具生成的证件照<strong>仅供参考和日常使用</strong>。对于正式证件（身份证、护照等），建议前往专业照相馆拍摄，因为：</p>
+                <ul>
+                  <li>部分证件对头部比例、眼睛位置有严格要求</li>
+                  <li>线上提交可能需要特定格式或电子检测</li>
+                  <li>打印质量与分辨率、色彩空间相关</li>
+                </ul>
+                <p>对于简历、工牌、考试报名等非正式场景，本工具完全够用。</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span>为什么 AI 模型加载很慢？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p>首次使用时，AI 模型需要从网络下载到浏览器缓存：</p>
+                <ul>
+                  <li><strong>U2NetP</strong>（快速模式）：约 4MB，秒级加载</li>
+                  <li><strong>BiRefNet</strong>（高质量模式）：约 183MB，首次加载较慢</li>
+                </ul>
+                <p>模型下载后会缓存在浏览器中，后续使用无需重复下载。如网络较慢，建议选择 U2NetP 模式。</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span>我的照片安全吗？会上传到服务器吗？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p><strong>完全安全！</strong>本工具所有处理均在浏览器本地完成：</p>
+                <ul>
+                  <li>图片不会上传到任何服务器</li>
+                  <li>AI 模型在本地 WebGPU 推理</li>
+                  <li>处理结果仅保存在您的浏览器内存中</li>
+                  <li>关闭页面后所有数据自动清除</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span>支持哪些图片格式？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p>支持上传 <strong>JPG / PNG / WebP</strong> 格式图片，建议文件不超过 4MB。</p>
+                <p>输出格式为 <strong>PNG</strong>（支持透明背景），如需 JPEG 格式可在下载后自行转换。</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span>为什么抠图效果不理想？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p>可能的原因和改善建议：</p>
+                <ul>
+                  <li><strong>背景与人物颜色相近</strong>：AI 可能误判，建议换用纯色背景重拍</li>
+                  <li><strong>头发边缘有残影</strong>：这是 AI 模型的固有局限，可尝试切换高质量模型</li>
+                  <li><strong>图片分辨率过低</strong>：建议使用 500px 以上的图片</li>
+                  <li><strong>多人/复杂场景</strong>：本工具针对单人证件照优化，复杂场景效果有限</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span>批量处理最多支持多少张？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p>理论上没有硬性限制，但建议单次不超过 <strong>20 张</strong>，原因：</p>
+                <ul>
+                  <li>每张图片处理需要占用 GPU 和内存资源</li>
+                  <li>过多图片可能导致浏览器内存不足</li>
+                  <li>处理时间与图片数量成正比</li>
+                </ul>
+                <p>如需处理更多，可分批进行。</p>
               </div>
             </div>
           </div>
