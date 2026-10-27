@@ -11,16 +11,16 @@
     <header class="header">
       <div class="header-top">
         <div class="header-brand" data-page="home">
-          <h1>🖼️ 证件照工坊</h1>
+          <h1><i data-lucide="image"></i> 证件照工坊</h1>
         </div>
         <nav class="nav">
-          <a class="nav-link active" href="#home" data-page="home">🏠 首页</a>
-          <a class="nav-link" href="#specs" data-page="specs">📐 证件照规格</a>
-          <a class="nav-link" href="#guide" data-page="guide">📷 拍摄指南</a>
-          <a class="nav-link" href="#batch" data-page="batch">📦 批量换底</a>
-          <a class="nav-link" href="#faq" data-page="faq">❓ 常见问题</a>
+          <a class="nav-link active" href="#home" data-page="home"><i data-lucide="house"></i> 首页</a>
+          <a class="nav-link" href="#specs" data-page="specs"><i data-lucide="ruler"></i> 证件照规格</a>
+          <a class="nav-link" href="#guide" data-page="guide"><i data-lucide="camera"></i> 拍摄指南</a>
+          <a class="nav-link" href="#batch" data-page="batch"><i data-lucide="package"></i> 批量换底</a>
+          <a class="nav-link" href="#faq" data-page="faq"><i data-lucide="circle-question-mark"></i> 常见问题</a>
         </nav>
-        <button class="nav-toggle" id="navToggle">☰</button>
+        <button class="nav-toggle" id="navToggle"><i data-lucide="menu"></i></button>
       </div>
       <p class="subtitle">纯前端 AI 抠图 · 无需上传服务器 · 隐私安全</p>
     </header>
@@ -30,7 +30,7 @@
       <section class="upload-section" id="uploadSection">
         <input type="file" id="fileInput" accept="image/*" hidden />
         <div class="upload-area" id="uploadArea">
-          <div class="upload-icon">📁</div>
+          <div class="upload-icon"><i data-lucide="folder-open"></i></div>
           <p>拖拽图片到此处，或点击选择图片</p>
           <p class="upload-hint">支持 JPG / PNG / WebP，建议不超过 4MB</p>
         </div>
@@ -40,22 +40,22 @@
         <div class="toolbar">
           <div class="toolbar-group">
             <button class="btn btn-primary" id="btnRemoveBg">
-              <span class="btn-icon">✂️</span> AI 去除背景
+              <span class="btn-icon"><i data-lucide="scissors"></i></span> AI 去除背景
             </button>
             <button class="btn" id="btnManualPick">
-              <span class="btn-icon">🎯</span> 手动取色去除
+              <span class="btn-icon"><i data-lucide="target"></i></span> 手动取色去除
             </button>
           </div>
 
           <div class="toolbar-group">
             <button class="btn" id="btnReset">
-              <span class="btn-icon">↩️</span> 重置
+              <span class="btn-icon"><i data-lucide="undo-2"></i></span> 重置
             </button>
             <button class="btn" id="btnReupload">
-              <span class="btn-icon">📂</span> 换图
+              <span class="btn-icon"><i data-lucide="folder-open"></i></span> 换图
             </button>
             <button class="btn btn-success" id="btnDownload">
-              <span class="btn-icon">💾</span> 下载结果
+              <span class="btn-icon"><i data-lucide="download"></i></span> 下载结果
             </button>
           </div>
         </div>
@@ -206,11 +206,11 @@
 
       <section class="page page-specs hidden" id="pageSpecs">
         <div class="page-content">
-          <h2 class="page-title">📐 证件照规格一览</h2>
+          <h2 class="page-title"><i data-lucide="ruler"></i> 证件照规格一览</h2>
           <p class="page-desc">不同场景对证件照的尺寸、背景色、分辨率要求各不相同，以下是常见规格汇总。</p>
 
           <div class="spec-category">
-            <h3>🪪 身份证 / 护照类</h3>
+            <h3><i data-lucide="credit-card"></i> 身份证 / 护照类</h3>
             <table class="spec-table">
               <thead>
                 <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
@@ -225,7 +225,7 @@
           </div>
 
           <div class="spec-category">
-            <h3>🎓 学历 / 考试类</h3>
+            <h3><i data-lucide="graduation-cap"></i> 学历 / 考试类</h3>
             <table class="spec-table">
               <thead>
                 <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
@@ -244,7 +244,7 @@
           </div>
 
           <div class="spec-category">
-            <h3>💼 职场 / 资格类</h3>
+            <h3><i data-lucide="briefcase"></i> 职场 / 资格类</h3>
             <table class="spec-table">
               <thead>
                 <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
@@ -261,7 +261,7 @@
           </div>
 
           <div class="spec-category">
-            <h3>🚗 驾照 / 车辆类</h3>
+            <h3><i data-lucide="car"></i> 驾照 / 车辆类</h3>
             <table class="spec-table">
               <thead>
                 <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
@@ -274,19 +274,19 @@
           </div>
 
           <div class="spec-tip">
-            <strong>💡 提示：</strong>以上规格仅供参考，具体要求请以办证机构官方通知为准。使用本工具制作证件照时，可在右侧"下载尺寸"面板中选择对应规格，一键导出。
+            <strong><i data-lucide="lightbulb"></i> 提示：</strong>以上规格仅供参考，具体要求请以办证机构官方通知为准。使用本工具制作证件照时，可在右侧"下载尺寸"面板中选择对应规格，一键导出。
           </div>
         </div>
       </section>
 
       <section class="page page-guide hidden" id="pageGuide">
         <div class="page-content">
-          <h2 class="page-title">📷 证件照拍摄指南</h2>
+          <h2 class="page-title"><i data-lucide="camera"></i> 证件照拍摄指南</h2>
           <p class="page-desc">一张合格的证件照，拍摄环节至关重要。以下是从准备到拍摄的完整攻略。</p>
 
           <div class="guide-grid">
             <div class="guide-card">
-              <div class="guide-card-icon">💡</div>
+              <div class="guide-card-icon"><i data-lucide="lightbulb"></i></div>
               <h3>光线</h3>
               <ul>
                 <li>使用<strong>均匀柔和的自然光</strong>或柔光灯，避免直射阳光</li>
@@ -297,7 +297,7 @@
             </div>
 
             <div class="guide-card">
-              <div class="guide-card-icon">🧍</div>
+              <div class="guide-card-icon"><i data-lucide="person-standing"></i></div>
               <h3>姿态</h3>
               <ul>
                 <li>头部居中，<strong>两耳可见</strong>，不偏不歪</li>
@@ -308,7 +308,7 @@
             </div>
 
             <div class="guide-card">
-              <div class="guide-card-icon">😊</div>
+              <div class="guide-card-icon"><i data-lucide="face-slightly-smiling"></i></div>
               <h3>表情</h3>
               <ul>
                 <li>表情自然，<strong>嘴唇闭合</strong>，不露齿</li>
@@ -319,7 +319,7 @@
             </div>
 
             <div class="guide-card">
-              <div class="guide-card-icon">👔</div>
+              <div class="guide-card-icon"><i data-lucide="shirt"></i></div>
               <h3>着装</h3>
               <ul>
                 <li>穿<strong>深色有领</strong>服装，与背景形成对比</li>
@@ -331,7 +331,7 @@
             </div>
 
             <div class="guide-card">
-              <div class="guide-card-icon">💇</div>
+              <div class="guide-card-icon"><i data-lucide="scissors"></i></div>
               <h3>发型</h3>
               <ul>
                 <li>头发不遮住眉毛、耳朵</li>
@@ -342,7 +342,7 @@
             </div>
 
             <div class="guide-card">
-              <div class="guide-card-icon">👓</div>
+              <div class="guide-card-icon"><i data-lucide="glasses"></i></div>
               <h3>配饰</h3>
               <ul>
                 <li>一般<strong>禁止佩戴帽子</strong></li>
@@ -354,7 +354,7 @@
             </div>
 
             <div class="guide-card">
-              <div class="guide-card-icon">📱</div>
+              <div class="guide-card-icon"><i data-lucide="smartphone"></i></div>
               <h3>手机拍摄技巧</h3>
               <ul>
                 <li>使用<strong>后置摄像头</strong>，画质更佳</li>
@@ -366,7 +366,7 @@
             </div>
 
             <div class="guide-card">
-              <div class="guide-card-icon">🖼️</div>
+              <div class="guide-card-icon"><i data-lucide="image"></i></div>
               <h3>背景要求</h3>
               <ul>
                 <li>背景<strong>纯色、无杂物</strong></li>
@@ -378,7 +378,7 @@
           </div>
 
           <div class="guide-flow">
-            <h3>📋 完整流程</h3>
+            <h3><i data-lucide="clipboard-list"></i> 完整流程</h3>
             <div class="flow-steps">
               <div class="flow-step">
                 <div class="flow-num">1</div>
@@ -411,11 +411,11 @@
 
       <section class="page page-batch hidden" id="pageBatch">
         <div class="page-content">
-          <h2 class="page-title">📦 批量换底</h2>
+          <h2 class="page-title"><i data-lucide="package"></i> 批量换底</h2>
           <p class="page-desc">一次性为多张证件照统一更换背景色，省时省力。</p>
 
           <div class="batch-upload-area" id="batchUploadArea">
-            <div class="batch-upload-icon">📂</div>
+            <div class="batch-upload-icon"><i data-lucide="folder-open"></i></div>
             <p>拖拽多张图片到此处，或点击选择图片</p>
             <p class="upload-hint">支持同时选择多张 JPG / PNG 图片</p>
             <input type="file" id="batchFileInput" accept="image/*" multiple hidden />
@@ -425,7 +425,7 @@
             <div class="batch-mode-select">
               <h3>抠图方式</h3>
               <div class="batch-mode-info">
-                <span class="mode-icon">✂️</span>
+                <span class="mode-icon"><i data-lucide="scissors"></i></span>
                 <span class="mode-label">AI 智能抠图</span>
                 <span class="mode-desc">自动识别前景人物并去除背景，适合各类证件照</span>
               </div>
@@ -467,9 +467,9 @@
           <div class="batch-preview-list" id="batchPreviewList"></div>
 
           <div class="batch-actions hidden" id="batchActions">
-            <button class="btn btn-primary" id="btnBatchProcess">🚀 开始批量处理</button>
-            <button class="btn btn-success hidden" id="btnBatchDownload">💾 打包下载全部</button>
-            <button class="btn" id="btnBatchClear">🗑️ 清空列表</button>
+            <button class="btn btn-primary" id="btnBatchProcess"><i data-lucide="rocket"></i> 开始批量处理</button>
+            <button class="btn btn-success hidden" id="btnBatchDownload"><i data-lucide="download"></i> 打包下载全部</button>
+            <button class="btn" id="btnBatchClear"><i data-lucide="trash"></i> 清空列表</button>
           </div>
 
           <div class="batch-progress hidden" id="batchProgress">
@@ -480,14 +480,14 @@
           </div>
 
           <div class="batch-tip">
-            <strong>💡 说明：</strong>批量处理使用 AI 自动去除背景，每张图片处理约需 2~5 秒。所有操作均在浏览器本地完成，图片不会上传到服务器。
+            <strong><i data-lucide="lightbulb"></i> 说明：</strong>批量处理使用 AI 自动去除背景，每张图片处理约需 2~5 秒。所有操作均在浏览器本地完成，图片不会上传到服务器。
           </div>
         </div>
       </section>
 
       <section class="page page-faq hidden" id="pageFaq">
         <div class="page-content">
-          <h2 class="page-title">❓ 常见问题</h2>
+          <h2 class="page-title"><i data-lucide="circle-question-mark"></i> 常见问题</h2>
           <p class="page-desc">关于证件照制作和本工具的常见疑问解答。</p>
 
           <div class="faq-list">

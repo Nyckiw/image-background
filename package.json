@@ -13,7 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "@planby-tech/rmbg-webgpu": "^0.2.1",
-    "jszip": "^3.10.2"
+    "jszip": "^3.10.2",
+    "lucide": "^1.61.0"
   },
   "devDependencies": {
     "vite": "^8.3.5"

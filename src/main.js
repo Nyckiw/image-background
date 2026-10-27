@@ -1,6 +1,14 @@
 import { RmbgSession } from "@planby-tech/rmbg-webgpu";
 import u2netpModelUrl from "@planby-tech/rmbg-webgpu/models/u2netp.onnx?url";
 import JSZip from "jszip";
+import { createIcons } from "lucide";
+import {
+  Image as ImageIcon, House, Ruler, Camera, Package, CircleQuestionMark, Menu,
+  FolderOpen, Scissors, Target, Undo2, Download,
+  CreditCard, GraduationCap, Briefcase, Car,
+  Lightbulb, PersonStanding, FaceSlightlySmiling, Shirt, Glasses,
+  Smartphone, ClipboardList, Rocket, Trash
+} from "lucide";
 
 // const AI_MODEL = "u2netp";
 const AI_MODEL = "birefnet";
@@ -629,6 +637,15 @@ function setupEvents() {
   });
 }
 
+const lucideIcons = {
+  Image: ImageIcon, House, Ruler, Camera, Package, CircleQuestionMark, Menu,
+  FolderOpen, Scissors, Target, Undo2, Download,
+  CreditCard, GraduationCap, Briefcase, Car,
+  Lightbulb, PersonStanding, FaceSlightlySmiling, Shirt, Glasses,
+  Smartphone, ClipboardList, Rocket, Trash
+};
+
+createIcons({ icons: lucideIcons });
 setupEvents();
 
 // ──────────────────────────────────────────────
@@ -922,7 +939,8 @@ async function downloadBatchAsZip() {
   const originalText = btn?.textContent;
   if (btn) {
     btn.disabled = true;
-    btn.textContent = "📦 正在打包...";
+    btn.innerHTML = '<i data-lucide="package"></i> 正在打包...';
+    createIcons({ icons: lucideIcons });
   }
 
   try {
@@ -947,7 +965,8 @@ async function downloadBatchAsZip() {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.textContent = originalText || "💾 打包下载全部";
+      btn.innerHTML = '<i data-lucide="download"></i> 打包下载全部';
+      createIcons({ icons: lucideIcons });
     }
   }
 }
