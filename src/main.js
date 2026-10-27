@@ -9,6 +9,7 @@ import {
   Lightbulb, PersonStanding, FaceSlightlySmiling, Shirt, Glasses,
   Smartphone, ClipboardList, Rocket, Trash
 } from "lucide";
+import { t, switchLang, applyTranslations, getCurrentLang } from "./i18n.js";
 
 // const AI_MODEL = "u2netp";
 const AI_MODEL = "birefnet";
@@ -37,11 +38,11 @@ const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 const SIZE_PRESETS = {
-  original: { label: "原大小", width: null, height: null },
-  "1inch": { label: "1寸", width: 295, height: 413 },
-  "2inch": { label: "2寸", width: 413, height: 579 },
-  big1inch: { label: "大1寸", width: 390, height: 567 },
-  small2inch: { label: "小2寸", width: 413, height: 526 },
+  original: { labelKey: "size_label_original", width: null, height: null },
+  "1inch": { labelKey: "size_label_1inch", width: 295, height: 413 },
+  "2inch": { labelKey: "size_label_2inch", width: 413, height: 579 },
+  big1inch: { labelKey: "size_label_big1inch", width: 390, height: 567 },
+  small2inch: { labelKey: "size_label_small2inch", width: 413, height: 526 },
 };
 
 let originalImage = null;
@@ -277,8 +278,8 @@ function updatePreview() {
     previewCtx.fillRect(dx, dy + dh - 24, 50, 24);
     previewCtx.fillRect(dx + dw - 50, dy + dh - 24, 50, 24);
     previewCtx.fillStyle = "#fff";
-    previewCtx.fillText("原图", dx + 8, dy + dh - 8);
-    previewCtx.fillText("结果", dx + dw - 42, dy + dh - 8);
+    previewCtx.fillText(t("compare_original"), dx + 8, dy + dh - 8);
+    previewCtx.fillText(t("compare_result"), dx + dw - 42, dy + dh - 8);
   } else {
     drawResultToPreview();
   }
@@ -308,8 +309,8 @@ async function handleFile(file) {
 async function getRmbgSession() {
   if (!rmbgSession) {
     const config = MODEL_CONFIGS[AI_MODEL] || MODEL_CONFIGS.u2netp;
-    const modelLabel = AI_MODEL === "birefnet" ? "BiRefNet-Lite 512 FP32 (~183MB)" : "U2NetP 快速 (~4MB)";
-    showOverlay(`正在加载 AI 模型 (${modelLabel})，首次使用需下载...`);
+    const modelLabel = AI_MODEL === "birefnet" ? t("model_birefnet") : t("model_u2netp");
+    showOverlay(t("overlay_loading_model", modelLabel));
     rmbgSession = await RmbgSession.create(config);
   }
   return rmbgSession;
@@ -320,14 +321,14 @@ async function removeBackgroundAI() {
 
   try {
     const session = await getRmbgSession();
-    showOverlay("正在推理抠图...");
+    showOverlay(t("overlay_inferring"));
 
     const response = await fetch(originalImage.src);
     const imageBlob = await response.blob();
     const result = await session.remove(imageBlob);
     const resultBlob = result.outputBlob;
 
-    showOverlay("处理完成，正在渲染...");
+    showOverlay(t("overlay_done"));
 
     const resultImg = new Image();
     resultImg.src = URL.createObjectURL(resultBlob);
@@ -347,7 +348,7 @@ async function removeBackgroundAI() {
     renderCanvas();
   } catch (err) {
     console.error("背景去除失败:", err);
-    alert("背景去除失败，请重试或换一张图片。\n" + err.message);
+    alert(t("alert_remove_fail", err.message));
   } finally {
     hideOverlay();
   }
@@ -450,7 +451,7 @@ function downloadResult() {
     finalCanvas.getContext("2d").drawImage(resizedCanvas, 0, 0);
   }
 
-  const sizeLabel = preset ? preset.label : "original";
+  const sizeLabel = preset ? t(preset.labelKey) : "original";
 
   finalCanvas.toBlob((blob) => {
     const url = URL.createObjectURL(blob);
@@ -530,7 +531,7 @@ function setupEvents() {
     $("#pickedSwatch").style.background = hex;
     $("#pickedColorText").textContent = hex;
 
-    showOverlay("正在处理...");
+    showOverlay(t("overlay_processing"));
     setTimeout(() => {
       removeBackgroundManual(hex, tolerance * 2.55, feather * 2);
       hideOverlay();
@@ -716,9 +717,9 @@ let batchBgColor = "#ffffff";
 async function getBatchRmbgSession() {
   if (!rmbgSession) {
     const config = MODEL_CONFIGS[AI_MODEL] || MODEL_CONFIGS.u2netp;
-    const modelLabel = AI_MODEL === "birefnet" ? "BiRefNet-Lite (~183MB)" : "U2NetP (~4MB)";
+    const modelLabel = AI_MODEL === "birefnet" ? t("model_birefnet_short") : t("model_u2netp_short");
     const progressText = document.querySelector("#batchProgressText");
-    if (progressText) progressText.textContent = `正在加载 AI 模型 (${modelLabel})，首次需下载...`;
+    if (progressText) progressText.textContent = t("batch_model_loading", modelLabel);
     rmbgSession = await RmbgSession.create(config);
   }
   return rmbgSession;
@@ -809,7 +810,7 @@ function renderBatchList() {
 
     const status = document.createElement("div");
     status.className = `batch-item-status ${item.status}`;
-    const statusText = { pending: "等待处理", processing: "处理中...", done: "已完成", error: "失败" };
+    const statusText = { pending: t("batch_status_pending"), processing: t("batch_status_processing"), done: t("batch_status_done"), error: t("batch_status_error") };
     status.textContent = statusText[item.status] || item.status;
     div.appendChild(status);
 
@@ -846,7 +847,7 @@ async function processBatch() {
     session = await getBatchRmbgSession();
   } catch (err) {
     console.error("AI 模型加载失败:", err);
-    if (progressText) progressText.textContent = `AI 模型加载失败: ${err.message}`;
+    if (progressText) progressText.textContent = t("batch_model_load_fail", err.message);
     document.querySelector("#btnBatchProcess").disabled = false;
     return;
   }
@@ -856,7 +857,7 @@ async function processBatch() {
   for (let i = 0; i < batchFiles.length; i++) {
     batchFiles[i].status = "processing";
     renderBatchList();
-    if (progressText) progressText.textContent = `AI 抠图 ${i + 1}/${batchFiles.length}...`;
+    if (progressText) progressText.textContent = t("batch_ai_cutting", i + 1, batchFiles.length);
 
     try {
       const origImg = new Image();
@@ -913,7 +914,7 @@ async function processBatch() {
     renderBatchList();
   }
 
-  if (progressText) progressText.textContent = `处理完成！成功 ${batchResults.length}/${batchFiles.length}`;
+  if (progressText) progressText.textContent = t("batch_process_complete", batchResults.length, batchFiles.length);
   document.querySelector("#btnBatchProcess").disabled = false;
   if (batchResults.length > 0) {
     document.querySelector("#btnBatchDownload")?.classList.remove("hidden");
@@ -927,7 +928,7 @@ async function downloadBatchAsZip() {
   const originalText = btn?.textContent;
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = '<i data-lucide="package"></i> 正在打包...';
+    btn.innerHTML = `<i data-lucide="package"></i> ${t("batch_packing")}`;
     createIcons({ icons: lucideIcons });
   }
 
@@ -936,7 +937,7 @@ async function downloadBatchAsZip() {
     const preset = SIZE_PRESETS[sizeKey];
 
     const zip = new JSZip();
-    const folderName = `证件照批量结果_${new Date().toISOString().slice(0, 10).replace(/-/g, "")}`;
+    const folderName = `${t("batch_folder_name")}_${new Date().toISOString().slice(0, 10).replace(/-/g, "")}`;
     const folder = zip.folder(folderName);
 
     for (const item of batchResults) {
@@ -980,11 +981,11 @@ async function downloadBatchAsZip() {
     URL.revokeObjectURL(url);
   } catch (err) {
     console.error("打包下载失败:", err);
-    alert("打包下载失败: " + err.message);
+    alert(t("batch_pack_fail", err.message));
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = '<i data-lucide="download"></i> 打包下载全部';
+      btn.innerHTML = `<i data-lucide="download"></i> ${t("batch_btn_download")}`;
       createIcons({ icons: lucideIcons });
     }
   }
@@ -1001,3 +1002,21 @@ function clearBatch() {
 }
 
 setupBatchEvents();
+
+// ──────────────────────────────────────────────
+// 国际化初始化
+// ──────────────────────────────────────────────
+const savedLang = getCurrentLang();
+if (savedLang !== "zh") {
+  switchLang(savedLang);
+} else {
+  document.documentElement.lang = "zh-CN";
+}
+applyTranslations();
+
+document.getElementById("langToggle")?.addEventListener("click", () => {
+  const newLang = getCurrentLang() === "zh" ? "en" : "zh";
+  switchLang(newLang);
+  createIcons({ icons: lucideIcons });
+  if (originalImage) updatePreview();
+});

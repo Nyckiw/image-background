@@ -11,18 +11,21 @@
     <header class="header">
       <div class="header-top">
         <div class="header-brand" data-page="home">
-          <h1><i data-lucide="image"></i> 证件照工坊</h1>
+          <h1><i data-lucide="image"></i> <span data-i18n="brand">证件照工坊</span></h1>
         </div>
         <nav class="nav">
-          <a class="nav-link active" href="#home" data-page="home"><i data-lucide="house"></i> 首页</a>
-          <a class="nav-link" href="#specs" data-page="specs"><i data-lucide="ruler"></i> 证件照规格</a>
-          <a class="nav-link" href="#guide" data-page="guide"><i data-lucide="camera"></i> 拍摄指南</a>
-          <a class="nav-link" href="#batch" data-page="batch"><i data-lucide="package"></i> 批量换底</a>
-          <a class="nav-link" href="#faq" data-page="faq"><i data-lucide="circle-question-mark"></i> 常见问题</a>
+          <a class="nav-link active" href="#home" data-page="home"><i data-lucide="house"></i> <span data-i18n="nav_home">首页</span></a>
+          <a class="nav-link" href="#specs" data-page="specs"><i data-lucide="ruler"></i> <span data-i18n="nav_specs">证件照规格</span></a>
+          <a class="nav-link" href="#guide" data-page="guide"><i data-lucide="camera"></i> <span data-i18n="nav_guide">拍摄指南</span></a>
+          <a class="nav-link" href="#batch" data-page="batch"><i data-lucide="package"></i> <span data-i18n="nav_batch">批量换底</span></a>
+          <a class="nav-link" href="#faq" data-page="faq"><i data-lucide="circle-question-mark"></i> <span data-i18n="nav_faq">常见问题</span></a>
         </nav>
-        <button class="nav-toggle" id="navToggle"><i data-lucide="menu"></i></button>
+        <div class="header-actions">
+          <button class="lang-toggle" id="langToggle">EN</button>
+          <button class="nav-toggle" id="navToggle"><i data-lucide="menu"></i></button>
+        </div>
       </div>
-      <p class="subtitle">采用开源AI模型 · 无需上传服务器 · 隐私安全 · 永久免费 </p>
+      <p class="subtitle" data-i18n="subtitle">采用开源AI模型 · 无需上传服务器 · 隐私安全 · 永久免费</p>
     </header>
 
     <main class="main">
@@ -31,8 +34,8 @@
         <input type="file" id="fileInput" accept="image/*" hidden />
         <div class="upload-area" id="uploadArea">
           <div class="upload-icon"><i data-lucide="folder-open"></i></div>
-          <p>拖拽图片到此处，或点击选择图片</p>
-          <p class="upload-hint">支持 JPG / PNG / WebP，建议不超过 4MB</p>
+          <p data-i18n="upload_drag">拖拽图片到此处，或点击选择图片</p>
+          <p class="upload-hint" data-i18n="upload_hint">支持 JPG / PNG / WebP，建议不超过 4MB</p>
         </div>
       </section>
 
@@ -40,22 +43,22 @@
         <div class="toolbar">
           <div class="toolbar-group">
             <button class="btn btn-primary" id="btnRemoveBg">
-              <span class="btn-icon"><i data-lucide="scissors"></i></span> AI 去除背景
+              <span class="btn-icon"><i data-lucide="scissors"></i></span> <span data-i18n="btn_remove_bg">AI 去除背景</span>
             </button>
             <button class="btn" id="btnManualPick">
-              <span class="btn-icon"><i data-lucide="target"></i></span> 手动取色去除
+              <span class="btn-icon"><i data-lucide="target"></i></span> <span data-i18n="btn_manual_pick">手动取色去除</span>
             </button>
           </div>
 
           <div class="toolbar-group">
             <button class="btn" id="btnReset">
-              <span class="btn-icon"><i data-lucide="undo-2"></i></span> 重置
+              <span class="btn-icon"><i data-lucide="undo-2"></i></span> <span data-i18n="btn_reset">重置</span>
             </button>
             <button class="btn" id="btnReupload">
-              <span class="btn-icon"><i data-lucide="folder-open"></i></span> 换图
+              <span class="btn-icon"><i data-lucide="folder-open"></i></span> <span data-i18n="btn_reupload">换图</span>
             </button>
             <button class="btn btn-success" id="btnDownload">
-              <span class="btn-icon"><i data-lucide="download"></i></span> 下载结果
+              <span class="btn-icon"><i data-lucide="download"></i></span> <span data-i18n="btn_download">下载结果</span>
             </button>
           </div>
         </div>
@@ -66,7 +69,7 @@
               <canvas id="mainCanvas"></canvas>
               <div class="canvas-overlay hidden" id="canvasOverlay">
                 <div class="spinner"></div>
-                <p id="overlayText">正在处理...</p>
+                <p id="overlayText" data-i18n="overlay_processing">正在处理...</p>
               </div>
             </div>
             <div class="canvas-info">
@@ -77,30 +80,30 @@
 
           <div class="sidebar">
             <div class="panel">
-              <h3 class="panel-title">背景设置</h3>
+              <h3 class="panel-title" data-i18n="panel_bg_settings">背景设置</h3>
 
               <div class="form-group">
                 <label>
                   <input type="radio" name="bgType" value="transparent" checked />
-                  透明背景
+                  <span data-i18n="bg_transparent">透明背景</span>
                 </label>
                 <label>
                   <input type="radio" name="bgType" value="color" />
-                  纯色背景
+                  <span data-i18n="bg_color">纯色背景</span>
                 </label>
                 <label>
                   <input type="radio" name="bgType" value="gradient" />
-                  渐变背景
+                  <span data-i18n="bg_gradient">渐变背景</span>
                 </label>
                 <label>
                   <input type="radio" name="bgType" value="image" />
-                  图片背景
+                  <span data-i18n="bg_image">图片背景</span>
                 </label>
               </div>
 
               <div class="bg-options hidden" id="bgColorOption">
                 <div class="form-group">
-                  <label>背景颜色</label>
+                  <label data-i18n="label_bg_color">背景颜色</label>
                   <div class="color-input-row">
                     <input type="color" id="bgColor" value="#ffffff" />
                     <input type="text" id="bgColorText" value="#ffffff" maxlength="7" />
@@ -110,29 +113,29 @@
 
               <div class="bg-options hidden" id="bgGradientOption">
                 <div class="form-group">
-                  <label>起始颜色</label>
+                  <label data-i18n="label_grad_start">起始颜色</label>
                   <input type="color" id="gradStart" value="#667eea" />
                 </div>
                 <div class="form-group">
-                  <label>结束颜色</label>
+                  <label data-i18n="label_grad_end">结束颜色</label>
                   <input type="color" id="gradEnd" value="#764ba2" />
                 </div>
                 <div class="form-group">
-                  <label>渐变方向</label>
+                  <label data-i18n="label_grad_dir">渐变方向</label>
                   <select id="gradDirection">
-                    <option value="to bottom">从上到下</option>
-                    <option value="to right">从左到右</option>
-                    <option value="to bottom right">左上到右下</option>
-                    <option value="to bottom left">右上到左下</option>
-                    <option value="circle">径向渐变</option>
+                    <option value="to bottom" data-i18n="grad_to_bottom">从上到下</option>
+                    <option value="to right" data-i18n="grad_to_right">从左到右</option>
+                    <option value="to bottom right" data-i18n="grad_to_br">左上到右下</option>
+                    <option value="to bottom left" data-i18n="grad_to_bl">右上到左下</option>
+                    <option value="circle" data-i18n="grad_circle">径向渐变</option>
                   </select>
                 </div>
               </div>
 
               <div class="bg-options hidden" id="bgImageOption">
                 <div class="form-group">
-                  <label>选择背景图片</label>
-                  <button class="btn btn-block" id="btnSelectBgImage">选择图片</button>
+                  <label data-i18n="label_select_bg_img">选择背景图片</label>
+                  <button class="btn btn-block" id="btnSelectBgImage" data-i18n="btn_select_img">选择图片</button>
                   <input type="file" id="bgImageInput" accept="image/*" hidden />
                 </div>
                 <div class="bg-image-preview hidden" id="bgImagePreview">
@@ -142,60 +145,60 @@
             </div>
 
             <div class="panel hidden" id="manualPanel">
-              <h3 class="panel-title">手动取色设置</h3>
+              <h3 class="panel-title" data-i18n="panel_manual_settings">手动取色设置</h3>
               <div class="form-group">
-                <label>容差: <span id="toleranceValue">30</span></label>
+                <label id="toleranceLabel">容差: <span id="toleranceValue">30</span></label>
                 <input type="range" id="tolerance" min="1" max="100" value="30" />
               </div>
               <div class="form-group">
-                <label>边缘羽化: <span id="featherValue">2</span></label>
+                <label id="featherLabel">边缘羽化: <span id="featherValue">2</span></label>
                 <input type="range" id="feather" min="0" max="20" value="2" />
               </div>
-              <p class="hint-text">点击图片上要去除的背景颜色区域</p>
+              <p class="hint-text" data-i18n="hint_click_bg">点击图片上要去除的背景颜色区域</p>
               <div class="picked-color hidden" id="pickedColorBox">
-                <span>已选颜色：</span>
+                <span data-i18n="picked_color">已选颜色：</span>
                 <span class="color-swatch" id="pickedSwatch"></span>
                 <span id="pickedColorText"></span>
               </div>
             </div>
 
             <div class="panel">
-              <h3 class="panel-title">下载尺寸</h3>
+              <h3 class="panel-title" data-i18n="panel_download_size">下载尺寸</h3>
               <div class="size-options">
                 <button class="size-btn active" data-size="original">
-                  <span class="size-label">原大小</span>
-                  <span class="size-desc">保持原始尺寸</span>
+                  <span class="size-label" data-i18n="size_original">原大小</span>
+                  <span class="size-desc" data-i18n="size_original_desc">保持原始尺寸</span>
                 </button>
                 <button class="size-btn" data-size="1inch">
-                  <span class="size-label">1寸</span>
-                  <span class="size-desc">295 × 413 px</span>
+                  <span class="size-label" data-i18n="size_1inch">1寸</span>
+                  <span class="size-desc" data-i18n="size_1inch_desc">295 × 413 px</span>
                 </button>
                 <button class="size-btn" data-size="2inch">
-                  <span class="size-label">2寸</span>
-                  <span class="size-desc">413 × 579 px</span>
+                  <span class="size-label" data-i18n="size_2inch">2寸</span>
+                  <span class="size-desc" data-i18n="size_2inch_desc">413 × 579 px</span>
                 </button>
                 <button class="size-btn" data-size="big1inch">
-                  <span class="size-label">大1寸</span>
-                  <span class="size-desc">390 × 567 px</span>
+                  <span class="size-label" data-i18n="size_big1inch">大1寸</span>
+                  <span class="size-desc" data-i18n="size_big1inch_desc">390 × 567 px</span>
                 </button>
                 <button class="size-btn" data-size="small2inch">
-                  <span class="size-label">小2寸</span>
-                  <span class="size-desc">413 × 526 px</span>
+                  <span class="size-label" data-i18n="size_small2inch">小2寸</span>
+                  <span class="size-desc" data-i18n="size_small2inch_desc">413 × 526 px</span>
                 </button>
               </div>
             </div>
 
             <div class="panel">
-              <h3 class="panel-title">预览</h3>
+              <h3 class="panel-title" data-i18n="panel_preview">预览</h3>
               <div class="preview-tabs">
-                <button class="tab-btn active" data-tab="result">结果</button>
-                <button class="tab-btn" data-tab="original">原图</button>
-                <button class="tab-btn" data-tab="compare">对比</button>
+                <button class="tab-btn active" data-tab="result" data-i18n="tab_result">结果</button>
+                <button class="tab-btn" data-tab="original" data-i18n="tab_original">原图</button>
+                <button class="tab-btn" data-tab="compare" data-i18n="tab_compare">对比</button>
               </div>
               <div class="preview-container" id="previewContainer">
                 <canvas id="previewCanvas"></canvas>
               </div>
-              <div class="checkerboard-bg" id="checkerboardHint">
+              <div class="checkerboard-bg" id="checkerboardHint" data-i18n="checkerboard_hint">
                 棋盘格 = 透明区域
               </div>
             </div>
@@ -206,74 +209,74 @@
 
       <section class="page page-specs hidden" id="pageSpecs">
         <div class="page-content">
-          <h2 class="page-title"><i data-lucide="ruler"></i> 证件照规格一览</h2>
-          <p class="page-desc">不同场景对证件照的尺寸、背景色、分辨率要求各不相同，以下是常见规格汇总。</p>
+          <h2 class="page-title"><i data-lucide="ruler"></i> <span data-i18n="specs_title">证件照规格一览</span></h2>
+          <p class="page-desc" data-i18n="specs_desc">不同场景对证件照的尺寸、背景色、分辨率要求各不相同，以下是常见规格汇总。</p>
 
           <div class="spec-category">
-            <h3><i data-lucide="credit-card"></i> 身份证 / 护照类</h3>
+            <h3><i data-lucide="credit-card"></i> <span data-i18n="specs_id_category">身份证 / 护照类</span></h3>
             <table class="spec-table">
               <thead>
-                <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
+                <tr><th data-i18n="specs_th_type">类型</th><th data-i18n="specs_th_size_mm">尺寸 (mm)</th><th data-i18n="specs_th_size_px">像素 (px)</th><th data-i18n="specs_th_bg">背景色</th><th data-i18n="specs_th_dpi">分辨率</th></tr>
               </thead>
               <tbody>
-                <tr><td>居民身份证</td><td>26 × 32</td><td>358 × 441</td><td>白色</td><td>350 dpi</td></tr>
-                <tr><td>中国护照</td><td>33 × 48</td><td>390 × 567</td><td>白色</td><td>300 dpi</td></tr>
-                <tr><td>签证照（通用）</td><td>35 × 45</td><td>413 × 531</td><td>白色</td><td>300 dpi</td></tr>
-                <tr><td>港澳通行证</td><td>33 × 48</td><td>390 × 567</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_id_1">居民身份证</td><td>26 × 32</td><td>358 × 441</td><td data-i18n="specs_color_white">白色</td><td>350 dpi</td></tr>
+                <tr><td data-i18n="specs_id_2">中国护照</td><td>33 × 48</td><td>390 × 567</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_id_3">签证照（通用）</td><td>35 × 45</td><td>413 × 531</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_id_4">港澳通行证</td><td>33 × 48</td><td>390 × 567</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
               </tbody>
             </table>
           </div>
 
           <div class="spec-category">
-            <h3><i data-lucide="graduation-cap"></i> 学历 / 考试类</h3>
+            <h3><i data-lucide="graduation-cap"></i> <span data-i18n="specs_edu_category">学历 / 考试类</span></h3>
             <table class="spec-table">
               <thead>
-                <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
+                <tr><th data-i18n="specs_th_type">类型</th><th data-i18n="specs_th_size_mm">尺寸 (mm)</th><th data-i18n="specs_th_size_px">像素 (px)</th><th data-i18n="specs_th_bg">背景色</th><th data-i18n="specs_th_dpi">分辨率</th></tr>
               </thead>
               <tbody>
-                <tr><td>1寸标准</td><td>25 × 35</td><td>295 × 413</td><td>红/蓝/白</td><td>300 dpi</td></tr>
-                <tr><td>2寸标准</td><td>35 × 49</td><td>413 × 579</td><td>红/蓝/白</td><td>300 dpi</td></tr>
-                <tr><td>小1寸</td><td>22 × 32</td><td>260 × 378</td><td>白色</td><td>300 dpi</td></tr>
-                <tr><td>小2寸</td><td>35 × 45</td><td>413 × 526</td><td>白色</td><td>300 dpi</td></tr>
-                <tr><td>大1寸</td><td>33 × 48</td><td>390 × 567</td><td>红/蓝/白</td><td>300 dpi</td></tr>
-                <tr><td>考研报名</td><td>—</td><td>300 × 400</td><td>白色</td><td>—</td></tr>
-                <tr><td>四六级考试</td><td>—</td><td>144 × 192</td><td>蓝色</td><td>—</td></tr>
-                <tr><td>学信网头像</td><td>—</td><td>480 × 640</td><td>蓝色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_edu_1">1寸标准</td><td>25 × 35</td><td>295 × 413</td><td data-i18n="specs_color_rbw">红/蓝/白</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_edu_2">2寸标准</td><td>35 × 49</td><td>413 × 579</td><td data-i18n="specs_color_rbw">红/蓝/白</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_edu_3">小1寸</td><td>22 × 32</td><td>260 × 378</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_edu_4">小2寸</td><td>35 × 45</td><td>413 × 526</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_edu_5">大1寸</td><td>33 × 48</td><td>390 × 567</td><td data-i18n="specs_color_rbw">红/蓝/白</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_edu_6">考研报名</td><td>—</td><td>300 × 400</td><td data-i18n="specs_color_white">白色</td><td>—</td></tr>
+                <tr><td data-i18n="specs_edu_7">四六级考试</td><td>—</td><td>144 × 192</td><td data-i18n="specs_color_blue">蓝色</td><td>—</td></tr>
+                <tr><td data-i18n="specs_edu_8">学信网头像</td><td>—</td><td>480 × 640</td><td data-i18n="specs_color_blue">蓝色</td><td>300 dpi</td></tr>
               </tbody>
             </table>
           </div>
 
           <div class="spec-category">
-            <h3><i data-lucide="briefcase"></i> 职场 / 资格类</h3>
+            <h3><i data-lucide="briefcase"></i> <span data-i18n="specs_work_category">职场 / 资格类</span></h3>
             <table class="spec-table">
               <thead>
-                <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
+                <tr><th data-i18n="specs_th_type">类型</th><th data-i18n="specs_th_size_mm">尺寸 (mm)</th><th data-i18n="specs_th_size_px">像素 (px)</th><th data-i18n="specs_th_bg">背景色</th><th data-i18n="specs_th_dpi">分辨率</th></tr>
               </thead>
               <tbody>
-                <tr><td>简历照片</td><td>25 × 35</td><td>295 × 413</td><td>蓝/白</td><td>300 dpi</td></tr>
-                <tr><td>教师资格认定</td><td>—</td><td>150 × 200</td><td>白色</td><td>—</td></tr>
-                <tr><td>会计初级</td><td>—</td><td>295 × 413</td><td>白色</td><td>—</td></tr>
-                <tr><td>一级建造师</td><td>25 × 35</td><td>295 × 413</td><td>白色</td><td>300 dpi</td></tr>
-                <tr><td>执业医师</td><td>25 × 35</td><td>295 × 413</td><td>白色</td><td>300 dpi</td></tr>
-                <tr><td>社保卡</td><td>26 × 32</td><td>358 × 441</td><td>白色</td><td>350 dpi</td></tr>
+                <tr><td data-i18n="specs_work_1">简历照片</td><td>25 × 35</td><td>295 × 413</td><td data-i18n="specs_color_bw">蓝/白</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_work_2">教师资格认定</td><td>—</td><td>150 × 200</td><td data-i18n="specs_color_white">白色</td><td>—</td></tr>
+                <tr><td data-i18n="specs_work_3">会计初级</td><td>—</td><td>295 × 413</td><td data-i18n="specs_color_white">白色</td><td>—</td></tr>
+                <tr><td data-i18n="specs_work_4">一级建造师</td><td>25 × 35</td><td>295 × 413</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_work_5">执业医师</td><td>25 × 35</td><td>295 × 413</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_work_6">社保卡</td><td>26 × 32</td><td>358 × 441</td><td data-i18n="specs_color_white">白色</td><td>350 dpi</td></tr>
               </tbody>
             </table>
           </div>
 
           <div class="spec-category">
-            <h3><i data-lucide="car"></i> 驾照 / 车辆类</h3>
+            <h3><i data-lucide="car"></i> <span data-i18n="specs_drive_category">驾照 / 车辆类</span></h3>
             <table class="spec-table">
               <thead>
-                <tr><th>类型</th><th>尺寸 (mm)</th><th>像素 (px)</th><th>背景色</th><th>分辨率</th></tr>
+                <tr><th data-i18n="specs_th_type">类型</th><th data-i18n="specs_th_size_mm">尺寸 (mm)</th><th data-i18n="specs_th_size_px">像素 (px)</th><th data-i18n="specs_th_bg">背景色</th><th data-i18n="specs_th_dpi">分辨率</th></tr>
               </thead>
               <tbody>
-                <tr><td>驾驶证</td><td>22 × 32</td><td>260 × 378</td><td>白色</td><td>300 dpi</td></tr>
-                <tr><td>行驶证</td><td>22 × 32</td><td>260 × 378</td><td>白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_drive_1">驾驶证</td><td>22 × 32</td><td>260 × 378</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
+                <tr><td data-i18n="specs_drive_2">行驶证</td><td>22 × 32</td><td>260 × 378</td><td data-i18n="specs_color_white">白色</td><td>300 dpi</td></tr>
               </tbody>
             </table>
           </div>
 
-          <div class="spec-tip">
+          <div class="spec-tip" data-i18n-html="specs_tip">
             <strong><i data-lucide="lightbulb"></i> 提示：</strong>以上规格仅供参考，具体要求请以办证机构官方通知为准。使用本工具制作证件照时，可在右侧"下载尺寸"面板中选择对应规格，一键导出。
           </div>
         </div>
@@ -281,128 +284,128 @@
 
       <section class="page page-guide hidden" id="pageGuide">
         <div class="page-content">
-          <h2 class="page-title"><i data-lucide="camera"></i> 证件照拍摄指南</h2>
-          <p class="page-desc">一张合格的证件照，拍摄环节至关重要。以下是从准备到拍摄的完整攻略。</p>
+          <h2 class="page-title"><i data-lucide="camera"></i> <span data-i18n="guide_title">证件照拍摄指南</span></h2>
+          <p class="page-desc" data-i18n="guide_desc">一张合格的证件照，拍摄环节至关重要。以下是从准备到拍摄的完整攻略。</p>
 
           <div class="guide-grid">
             <div class="guide-card">
               <div class="guide-card-icon"><i data-lucide="lightbulb"></i></div>
-              <h3>光线</h3>
+              <h3 data-i18n="guide_light">光线</h3>
               <ul>
-                <li>使用<strong>均匀柔和的自然光</strong>或柔光灯，避免直射阳光</li>
-                <li>面部左右光线对称，避免一侧阴影</li>
-                <li>推荐<strong>正面顺光</strong>，不要侧光或逆光</li>
-                <li>如用手机闪光灯，保持 1.5m 以上距离，避免过曝</li>
+                <li data-i18n="guide_light_1">使用<strong>均匀柔和的自然光</strong>或柔光灯，避免直射阳光</li>
+                <li data-i18n="guide_light_2">面部左右光线对称，避免一侧阴影</li>
+                <li data-i18n="guide_light_3">推荐<strong>正面顺光</strong>，不要侧光或逆光</li>
+                <li data-i18n="guide_light_4">如用手机闪光灯，保持 1.5m 以上距离，避免过曝</li>
               </ul>
             </div>
 
             <div class="guide-card">
               <div class="guide-card-icon"><i data-lucide="person-standing"></i></div>
-              <h3>姿态</h3>
+              <h3 data-i18n="guide_posture">姿态</h3>
               <ul>
-                <li>头部居中，<strong>两耳可见</strong>，不偏不歪</li>
-                <li>双肩水平，身体正对镜头</li>
-                <li>下巴微收，避免仰头或低头</li>
-                <li>双目<strong>正视镜头</strong>，自然睁大</li>
+                <li data-i18n="guide_posture_1">头部居中，<strong>两耳可见</strong>，不偏不歪</li>
+                <li data-i18n="guide_posture_2">双肩水平，身体正对镜头</li>
+                <li data-i18n="guide_posture_3">下巴微收，避免仰头或低头</li>
+                <li data-i18n="guide_posture_4">双目<strong>正视镜头</strong>，自然睁大</li>
               </ul>
             </div>
 
             <div class="guide-card">
               <div class="guide-card-icon"><i data-lucide="face-slightly-smiling"></i></div>
-              <h3>表情</h3>
+              <h3 data-i18n="guide_expression">表情</h3>
               <ul>
-                <li>表情自然，<strong>嘴唇闭合</strong>，不露齿</li>
-                <li>可微笑但不要夸张</li>
-                <li>眼睛自然睁开，不眯眼</li>
-                <li>部分证件要求<strong>不笑</strong>（如护照），请提前确认</li>
+                <li data-i18n="guide_expr_1">表情自然，<strong>嘴唇闭合</strong>，不露齿</li>
+                <li data-i18n="guide_expr_2">可微笑但不要夸张</li>
+                <li data-i18n="guide_expr_3">眼睛自然睁开，不眯眼</li>
+                <li data-i18n="guide_expr_4">部分证件要求<strong>不笑</strong>（如护照），请提前确认</li>
               </ul>
             </div>
 
             <div class="guide-card">
               <div class="guide-card-icon"><i data-lucide="shirt"></i></div>
-              <h3>着装</h3>
+              <h3 data-i18n="guide_dress">着装</h3>
               <ul>
-                <li>穿<strong>深色有领</strong>服装，与背景形成对比</li>
-                <li>白色背景 → 不穿白色/浅色上衣</li>
-                <li>蓝色背景 → 不穿蓝色上衣</li>
-                <li>避免吊带、背心、低胸装</li>
-                <li>制服类证件照需穿对应制服</li>
+                <li data-i18n="guide_dress_1">穿<strong>深色有领</strong>服装，与背景形成对比</li>
+                <li data-i18n="guide_dress_2">白色背景 → 不穿白色/浅色上衣</li>
+                <li data-i18n="guide_dress_3">蓝色背景 → 不穿蓝色上衣</li>
+                <li data-i18n="guide_dress_4">避免吊带、背心、低胸装</li>
+                <li data-i18n="guide_dress_5">制服类证件照需穿对应制服</li>
               </ul>
             </div>
 
             <div class="guide-card">
               <div class="guide-card-icon"><i data-lucide="scissors"></i></div>
-              <h3>发型</h3>
+              <h3 data-i18n="guide_hairstyle">发型</h3>
               <ul>
-                <li>头发不遮住眉毛、耳朵</li>
-                <li>长发建议扎起或置于肩后</li>
-                <li>刘海不能遮住眉毛</li>
-                <li>避免过于蓬松的发型</li>
+                <li data-i18n="guide_hair_1">头发不遮住眉毛、耳朵</li>
+                <li data-i18n="guide_hair_2">长发建议扎起或置于肩后</li>
+                <li data-i18n="guide_hair_3">刘海不能遮住眉毛</li>
+                <li data-i18n="guide_hair_4">避免过于蓬松的发型</li>
               </ul>
             </div>
 
             <div class="guide-card">
               <div class="guide-card-icon"><i data-lucide="glasses"></i></div>
-              <h3>配饰</h3>
+              <h3 data-i18n="guide_accessory">配饰</h3>
               <ul>
-                <li>一般<strong>禁止佩戴帽子</strong></li>
-                <li>眼镜：部分证件允许，但镜片<strong>不能反光</strong></li>
-                <li>不得佩戴有色眼镜、墨镜</li>
-                <li>耳饰、项链等建议取下</li>
-                <li>宗教头饰需特殊申请</li>
+                <li data-i18n="guide_acc_1">一般<strong>禁止佩戴帽子</strong></li>
+                <li data-i18n="guide_acc_2">眼镜：部分证件允许，但镜片<strong>不能反光</strong></li>
+                <li data-i18n="guide_acc_3">不得佩戴有色眼镜、墨镜</li>
+                <li data-i18n="guide_acc_4">耳饰、项链等建议取下</li>
+                <li data-i18n="guide_acc_5">宗教头饰需特殊申请</li>
               </ul>
             </div>
 
             <div class="guide-card">
               <div class="guide-card-icon"><i data-lucide="smartphone"></i></div>
-              <h3>手机拍摄技巧</h3>
+              <h3 data-i18n="guide_phone_tips">手机拍摄技巧</h3>
               <ul>
-                <li>使用<strong>后置摄像头</strong>，画质更佳</li>
-                <li>距离 1~1.5m，使用<strong>2x 变焦</strong>减少畸变</li>
-                <li>请他人帮忙拍摄，避免自拍畸变</li>
-                <li>开启网格线辅助居中对齐</li>
-                <li>使用三脚架保持稳定</li>
+                <li data-i18n="guide_phone_1">使用<strong>后置摄像头</strong>，画质更佳</li>
+                <li data-i18n="guide_phone_2">距离 1~1.5m，使用<strong>2x 变焦</strong>减少畸变</li>
+                <li data-i18n="guide_phone_3">请他人帮忙拍摄，避免自拍畸变</li>
+                <li data-i18n="guide_phone_4">开启网格线辅助居中对齐</li>
+                <li data-i18n="guide_phone_5">使用三脚架保持稳定</li>
               </ul>
             </div>
 
             <div class="guide-card">
               <div class="guide-card-icon"><i data-lucide="image"></i></div>
-              <h3>背景要求</h3>
+              <h3 data-i18n="guide_bg_require">背景要求</h3>
               <ul>
-                <li>背景<strong>纯色、无杂物</strong></li>
-                <li>常见：白色、蓝色(#438EDB)、红色(#FF0000)</li>
-                <li>如背景不纯，可用本工具 AI 去除后替换</li>
-                <li>拍摄时尽量靠墙，减少阴影</li>
+                <li data-i18n="guide_bg_1">背景<strong>纯色、无杂物</strong></li>
+                <li data-i18n="guide_bg_2">常见：白色、蓝色(#438EDB)、红色(#FF0000)</li>
+                <li data-i18n="guide_bg_3">如背景不纯，可用本工具 AI 去除后替换</li>
+                <li data-i18n="guide_bg_4">拍摄时尽量靠墙，减少阴影</li>
               </ul>
             </div>
           </div>
 
           <div class="guide-flow">
-            <h3><i data-lucide="clipboard-list"></i> 完整流程</h3>
+            <h3><i data-lucide="clipboard-list"></i> <span data-i18n="guide_flow">完整流程</span></h3>
             <div class="flow-steps">
               <div class="flow-step">
                 <div class="flow-num">1</div>
-                <div class="flow-text">确认证件照规格要求（尺寸、底色）</div>
+                <div class="flow-text" data-i18n="guide_flow_1">确认证件照规格要求（尺寸、底色）</div>
               </div>
               <div class="flow-step">
                 <div class="flow-num">2</div>
-                <div class="flow-text">按指南拍摄原始照片</div>
+                <div class="flow-text" data-i18n="guide_flow_2">按指南拍摄原始照片</div>
               </div>
               <div class="flow-step">
                 <div class="flow-num">3</div>
-                <div class="flow-text">上传到本工具，AI 去除背景</div>
+                <div class="flow-text" data-i18n="guide_flow_3">上传到本工具，AI 去除背景</div>
               </div>
               <div class="flow-step">
                 <div class="flow-num">4</div>
-                <div class="flow-text">选择目标背景色</div>
+                <div class="flow-text" data-i18n="guide_flow_4">选择目标背景色</div>
               </div>
               <div class="flow-step">
                 <div class="flow-num">5</div>
-                <div class="flow-text">选择输出尺寸规格</div>
+                <div class="flow-text" data-i18n="guide_flow_5">选择输出尺寸规格</div>
               </div>
               <div class="flow-step">
                 <div class="flow-num">6</div>
-                <div class="flow-text">下载成品证件照</div>
+                <div class="flow-text" data-i18n="guide_flow_6">下载成品证件照</div>
               </div>
             </div>
           </div>
@@ -411,55 +414,55 @@
 
       <section class="page page-batch hidden" id="pageBatch">
         <div class="page-content">
-          <h2 class="page-title"><i data-lucide="package"></i> 批量换底</h2>
-          <p class="page-desc">一次性为多张证件照统一更换背景色，省时省力。</p>
+          <h2 class="page-title"><i data-lucide="package"></i> <span data-i18n="batch_title">批量换底</span></h2>
+          <p class="page-desc" data-i18n="batch_desc">一次性为多张证件照统一更换背景色，省时省力。</p>
 
           <div class="batch-upload-area" id="batchUploadArea">
             <div class="batch-upload-icon"><i data-lucide="folder-open"></i></div>
-            <p>拖拽多张图片到此处，或点击选择图片</p>
-            <p class="upload-hint">支持同时选择多张 JPG / PNG 图片</p>
+            <p data-i18n="batch_drag">拖拽多张图片到此处，或点击选择图片</p>
+            <p class="upload-hint" data-i18n="batch_hint">支持同时选择多张 JPG / PNG 图片</p>
             <input type="file" id="batchFileInput" accept="image/*" multiple hidden />
           </div>
 
           <div class="batch-settings hidden" id="batchSettings">
             <div class="batch-mode-select">
-              <h3>抠图方式</h3>
+              <h3 data-i18n="batch_cut_mode">抠图方式</h3>
               <div class="batch-mode-info">
                 <span class="mode-icon"><i data-lucide="scissors"></i></span>
-                <span class="mode-label">AI 智能抠图</span>
-                <span class="mode-desc">自动识别前景人物并去除背景，适合各类证件照</span>
+                <span class="mode-label" data-i18n="batch_ai_label">AI 智能抠图</span>
+                <span class="mode-desc" data-i18n="batch_ai_desc">自动识别前景人物并去除背景，适合各类证件照</span>
               </div>
             </div>
 
             <div class="batch-bg-select">
-              <h3>目标背景色</h3>
+              <h3 data-i18n="batch_target_bg">目标背景色</h3>
               <div class="batch-colors">
-                <button class="batch-color-btn active" data-color="#ffffff" style="background:#ffffff" title="白色"></button>
-                <button class="batch-color-btn" data-color="#438edb" style="background:#438edb" title="证件蓝"></button>
-                <button class="batch-color-btn" data-color="#67b2e8" style="background:#67b2e8" title="浅蓝"></button>
-                <button class="batch-color-btn" data-color="#1a4c8a" style="background:#1a4c8a" title="深蓝"></button>
-                <button class="batch-color-btn" data-color="#ff0000" style="background:#ff0000" title="红色"></button>
-                <button class="batch-color-btn" data-color="#d70015" style="background:#d70015" title="暗红"></button>
-                <button class="batch-color-btn" data-color="#f5f5dc" style="background:#f5f5dc" title="米色"></button>
-                <button class="batch-color-btn" data-color="#e8e8e8" style="background:#e8e8e8" title="浅灰"></button>
-                <button class="batch-color-btn" data-color="#000000" style="background:#000000" title="黑色"></button>
-                <button class="batch-color-btn" data-color="transparent" style="background:repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 50%/12px 12px" title="透明"></button>
+                <button class="batch-color-btn active" data-color="#ffffff" style="background:#ffffff" data-i18n-title="batch_color_white" title="白色"></button>
+                <button class="batch-color-btn" data-color="#438edb" style="background:#438edb" data-i18n-title="batch_color_id_blue" title="证件蓝"></button>
+                <button class="batch-color-btn" data-color="#67b2e8" style="background:#67b2e8" data-i18n-title="batch_color_light_blue" title="浅蓝"></button>
+                <button class="batch-color-btn" data-color="#1a4c8a" style="background:#1a4c8a" data-i18n-title="batch_color_dark_blue" title="深蓝"></button>
+                <button class="batch-color-btn" data-color="#ff0000" style="background:#ff0000" data-i18n-title="batch_color_red" title="红色"></button>
+                <button class="batch-color-btn" data-color="#d70015" style="background:#d70015" data-i18n-title="batch_color_dark_red" title="暗红"></button>
+                <button class="batch-color-btn" data-color="#f5f5dc" style="background:#f5f5dc" data-i18n-title="batch_color_beige" title="米色"></button>
+                <button class="batch-color-btn" data-color="#e8e8e8" style="background:#e8e8e8" data-i18n-title="batch_color_light_gray" title="浅灰"></button>
+                <button class="batch-color-btn" data-color="#000000" style="background:#000000" data-i18n-title="batch_color_black" title="黑色"></button>
+                <button class="batch-color-btn" data-color="transparent" style="background:repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 50%/12px 12px" data-i18n-title="batch_color_transparent" title="透明"></button>
               </div>
               <div class="batch-color-custom">
-                <label>自定义颜色：</label>
+                <label data-i18n="batch_custom_color">自定义颜色：</label>
                 <input type="color" id="batchCustomColor" value="#ffffff" />
                 <input type="text" id="batchCustomColorText" value="#ffffff" maxlength="7" />
               </div>
             </div>
 
             <div class="batch-size-select">
-              <h3>输出尺寸</h3>
+              <h3 data-i18n="batch_output_size">输出尺寸</h3>
               <select id="batchSizeSelect">
-                <option value="original">原大小</option>
-                <option value="1inch">1寸 (295×413)</option>
-                <option value="2inch">2寸 (413×579)</option>
-                <option value="big1inch">大1寸 (390×567)</option>
-                <option value="small2inch">小2寸 (413×526)</option>
+                <option value="original" data-i18n="size_original">原大小</option>
+                <option value="1inch" data-i18n="batch_size_1inch">1寸 (295×413)</option>
+                <option value="2inch" data-i18n="batch_size_2inch">2寸 (413×579)</option>
+                <option value="big1inch" data-i18n="batch_size_big1inch">大1寸 (390×567)</option>
+                <option value="small2inch" data-i18n="batch_size_small2inch">小2寸 (413×526)</option>
               </select>
             </div>
           </div>
@@ -467,19 +470,19 @@
           <div class="batch-preview-list" id="batchPreviewList"></div>
 
           <div class="batch-actions hidden" id="batchActions">
-            <button class="btn btn-primary" id="btnBatchProcess"><i data-lucide="rocket"></i> 开始批量处理</button>
-            <button class="btn btn-success hidden" id="btnBatchDownload"><i data-lucide="download"></i> 打包下载全部</button>
-            <button class="btn" id="btnBatchClear"><i data-lucide="trash"></i> 清空列表</button>
+            <button class="btn btn-primary" id="btnBatchProcess"><i data-lucide="rocket"></i> <span data-i18n="batch_btn_process">开始批量处理</span></button>
+            <button class="btn btn-success hidden" id="btnBatchDownload"><i data-lucide="download"></i> <span data-i18n="batch_btn_download">打包下载全部</span></button>
+            <button class="btn" id="btnBatchClear"><i data-lucide="trash"></i> <span data-i18n="batch_btn_clear">清空列表</span></button>
           </div>
 
           <div class="batch-progress hidden" id="batchProgress">
             <div class="progress-bar">
               <div class="progress-fill" id="batchProgressFill"></div>
             </div>
-            <p class="progress-text" id="batchProgressText">处理中... 0/0</p>
+            <p class="progress-text" id="batchProgressText" data-i18n="batch_progress_text">处理中... 0/0</p>
           </div>
 
-          <div class="batch-tip">
+          <div class="batch-tip" data-i18n-html="batch_tip">
             <strong><i data-lucide="lightbulb"></i> 说明：</strong>批量处理使用 AI 自动去除背景，每张图片处理约需 2~5 秒。所有操作均在浏览器本地完成，图片不会上传到服务器。
           </div>
         </div>
@@ -487,139 +490,139 @@
 
       <section class="page page-faq hidden" id="pageFaq">
         <div class="page-content">
-          <h2 class="page-title"><i data-lucide="circle-question-mark"></i> 常见问题</h2>
-          <p class="page-desc">关于证件照制作和本工具的常见疑问解答。</p>
+          <h2 class="page-title"><i data-lucide="circle-question-mark"></i> <span data-i18n="faq_title">常见问题</span></h2>
+          <p class="page-desc" data-i18n="faq_desc">关于证件照制作和本工具的常见疑问解答。</p>
 
           <div class="faq-list">
             <div class="faq-item">
               <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>证件照的背景色有哪些要求？</span>
+                <span data-i18n="faq_q1">证件照的背景色有哪些要求？</span>
                 <span class="faq-arrow">▸</span>
               </div>
               <div class="faq-a">
-                <p>常见背景色要求：</p>
+                <p data-i18n="faq_a1_title">常见背景色要求：</p>
                 <ul>
-                  <li><strong>白色</strong>：身份证、护照、驾照、社保卡等大多数证件</li>
-                  <li><strong>蓝色</strong>（约 #438EDB）：毕业证、学位证、四六级、部分资格考试</li>
-                  <li><strong>红色</strong>（约 #FF0000）：部分结婚证、保险、工会等</li>
+                  <li data-i18n="faq_a1_1"><strong>白色</strong>：身份证、护照、驾照、社保卡等大多数证件</li>
+                  <li data-i18n="faq_a1_2"><strong>蓝色</strong>（约 #438EDB）：毕业证、学位证、四六级、部分资格考试</li>
+                  <li data-i18n="faq_a1_3"><strong>红色</strong>（约 #FF0000）：部分结婚证、保险、工会等</li>
                 </ul>
-                <p>具体要求请以办证机构通知为准。</p>
+                <p data-i18n="faq_a1_end">具体要求请以办证机构通知为准。</p>
               </div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>AI 抠图和手动取色有什么区别？</span>
+                <span data-i18n="faq_q2">AI 抠图和手动取色有什么区别？</span>
                 <span class="faq-arrow">▸</span>
               </div>
               <div class="faq-a">
-                <p><strong>AI 去除背景</strong>：使用深度学习模型自动识别前景人物，适合背景复杂、颜色不纯的照片。效果更好但处理稍慢。</p>
-                <p><strong>手动取色去除</strong>：点击图片上的背景色，基于颜色容差去除。适合背景颜色单一、与人物颜色差异明显的照片。速度更快。</p>
-                <p>建议优先使用 AI 模式，如对结果不满意可重置后尝试手动模式。</p>
+                <p data-i18n="faq_a2_1"><strong>AI 去除背景</strong>：使用深度学习模型自动识别前景人物，适合背景复杂、颜色不纯的照片。效果更好但处理稍慢。</p>
+                <p data-i18n="faq_a2_2"><strong>手动取色去除</strong>：点击图片上的背景色，基于颜色容差去除。适合背景颜色单一、与人物颜色差异明显的照片。速度更快。</p>
+                <p data-i18n="faq_a2_3">建议优先使用 AI 模式，如对结果不满意可重置后尝试手动模式。</p>
               </div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>处理后的证件照能直接使用吗？</span>
+                <span data-i18n="faq_q3">处理后的证件照能直接使用吗？</span>
                 <span class="faq-arrow">▸</span>
               </div>
               <div class="faq-a">
-                <p>本工具生成的证件照<strong>仅供参考和日常使用</strong>。对于正式证件（身份证、护照等），建议前往专业照相馆拍摄，因为：</p>
+                <p data-i18n="faq_a3_1">本工具生成的证件照<strong>仅供参考和日常使用</strong>。对于正式证件（身份证、护照等），建议前往专业照相馆拍摄，因为：</p>
                 <ul>
-                  <li>部分证件对头部比例、眼睛位置有严格要求</li>
-                  <li>线上提交可能需要特定格式或电子检测</li>
-                  <li>打印质量与分辨率、色彩空间相关</li>
+                  <li data-i18n="faq_a3_2">部分证件对头部比例、眼睛位置有严格要求</li>
+                  <li data-i18n="faq_a3_3">线上提交可能需要特定格式或电子检测</li>
+                  <li data-i18n="faq_a3_4">打印质量与分辨率、色彩空间相关</li>
                 </ul>
-                <p>对于简历、工牌、考试报名等非正式场景，本工具完全够用。</p>
+                <p data-i18n="faq_a3_5">对于简历、工牌、考试报名等非正式场景，本工具完全够用。</p>
               </div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>为什么 AI 模型加载很慢？</span>
+                <span data-i18n="faq_q4">为什么 AI 模型加载很慢？</span>
                 <span class="faq-arrow">▸</span>
               </div>
               <div class="faq-a">
-                <p>首次使用时，AI 模型需要从网络下载到浏览器缓存：</p>
+                <p data-i18n="faq_a4_1">首次使用时，AI 模型需要从网络下载到浏览器缓存：</p>
                 <ul>
-                  <li><strong>ai模型</strong>（高质量模式）：约 183MB，首次加载较慢，会缓存到浏览器，关闭浏览器会自动清除释放</li>
+                  <li data-i18n="faq_a4_2"><strong>ai模型</strong>（高质量模式）：约 183MB，首次加载较慢，会缓存到浏览器，关闭浏览器会自动清除释放</li>
                 </ul>
-                <p>模型下载后会缓存在浏览器中，后续使用无需重复下载。如网络较慢，建议耐心等待模型加载完成。</p>
+                <p data-i18n="faq_a4_3">模型下载后会缓存在浏览器中，后续使用无需重复下载。如网络较慢，建议耐心等待模型加载完成。</p>
               </div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>我的照片安全吗？会上传到服务器吗？</span>
+                <span data-i18n="faq_q5">我的照片安全吗？会上传到服务器吗？</span>
                 <span class="faq-arrow">▸</span>
               </div>
               <div class="faq-a">
-                <p><strong>完全安全！</strong>本工具所有处理均在浏览器本地完成：</p>
+                <p data-i18n="faq_a5_1"><strong>完全安全！</strong>本工具所有处理均在浏览器本地完成：</p>
                 <ul>
-                  <li>图片不会上传到任何服务器</li>
-                  <li>AI 模型在本地 WebGPU 推理</li>
-                  <li>处理结果仅保存在您的浏览器内存中</li>
-                  <li>关闭页面后所有数据自动清除</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>支持哪些图片格式？</span>
-                <span class="faq-arrow">▸</span>
-              </div>
-              <div class="faq-a">
-                <p>支持上传 <strong>JPG / PNG / WebP</strong> 格式图片，建议文件不超过 4MB。</p>
-                <p>输出格式为 <strong>PNG</strong>（支持透明背景），如需 JPEG 格式可在下载后自行转换。</p>
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>为什么抠图效果不理想？</span>
-                <span class="faq-arrow">▸</span>
-              </div>
-              <div class="faq-a">
-                <p>可能的原因和改善建议：</p>
-                <ul>
-                  <li><strong>背景与人物颜色相近</strong>：AI 可能误判，建议换用纯色背景重拍</li>
-                  <li><strong>头发边缘有残影</strong>：这是 AI 模型的固有局限，可尝试切换高质量模型</li>
-                  <li><strong>图片分辨率过低</strong>：建议使用 500px 以上的图片</li>
-                  <li><strong>多人/复杂场景</strong>：本工具针对单人证件照优化，复杂场景效果有限</li>
+                  <li data-i18n="faq_a5_2">图片不会上传到任何服务器</li>
+                  <li data-i18n="faq_a5_3">AI 模型在本地 WebGPU 推理</li>
+                  <li data-i18n="faq_a5_4">处理结果仅保存在您的浏览器内存中</li>
+                  <li data-i18n="faq_a5_5">关闭页面后所有数据自动清除</li>
                 </ul>
               </div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>批量处理最多支持多少张？</span>
+                <span data-i18n="faq_q6">支持哪些图片格式？</span>
                 <span class="faq-arrow">▸</span>
               </div>
               <div class="faq-a">
-                <p>理论上没有硬性限制，但建议单次不超过 <strong>20 张</strong>，原因：</p>
-                <ul>
-                  <li>每张图片处理需要占用 GPU 和内存资源</li>
-                  <li>过多图片可能导致浏览器内存不足</li>
-                  <li>处理时间与图片数量成正比</li>
-                </ul>
-                <p>如需处理更多，可分批进行。</p>
+                <p data-i18n="faq_a6_1">支持上传 <strong>JPG / PNG / WebP</strong> 格式图片，建议文件不超过 4MB。</p>
+                <p data-i18n="faq_a6_2">输出格式为 <strong>PNG</strong>（支持透明背景），如需 JPEG 格式可在下载后自行转换。</p>
               </div>
             </div>
 
             <div class="faq-item">
               <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-                <span>联系我们？</span>
+                <span data-i18n="faq_q7">为什么抠图效果不理想？</span>
                 <span class="faq-arrow">▸</span>
               </div>
               <div class="faq-a">
-                <p>如您有任何问题或建议，欢迎联系我:jsj999jcy@gmail.com</a></p>
+                <p data-i18n="faq_a7_1">可能的原因和改善建议：</p>
                 <ul>
-                  <li>功能痛点，使用的bug,欢迎邮件联系我</li>
-                  <li>项目为爱发电，部署在超级小鸡上，如果无法访问，请联系我续费服务器或域名</li>
-                  <li>免费使用，项目为非商业项目，不提供商业支持，切勿滥用</li>
-                  <li>项目使用的依赖为免费开源的，协议为Apache-2.0协议或MIT协议</li>
+                  <li data-i18n="faq_a7_2"><strong>背景与人物颜色相近</strong>：AI 可能误判，建议换用纯色背景重拍</li>
+                  <li data-i18n="faq_a7_3"><strong>头发边缘有残影</strong>：这是 AI 模型的固有局限，可尝试切换高质量模型</li>
+                  <li data-i18n="faq_a7_4"><strong>图片分辨率过低</strong>：建议使用 500px 以上的图片</li>
+                  <li data-i18n="faq_a7_5"><strong>多人/复杂场景</strong>：本工具针对单人证件照优化，复杂场景效果有限</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span data-i18n="faq_q8">批量处理最多支持多少张？</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p data-i18n="faq_a8_1">理论上没有硬性限制，但建议单次不超过 <strong>20 张</strong>，原因：</p>
+                <ul>
+                  <li data-i18n="faq_a8_2">每张图片处理需要占用 GPU 和内存资源</li>
+                  <li data-i18n="faq_a8_3">过多图片可能导致浏览器内存不足</li>
+                  <li data-i18n="faq_a8_4">处理时间与图片数量成正比</li>
+                </ul>
+                <p data-i18n="faq_a8_5">如需处理更多，可分批进行。</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+                <span data-i18n="faq_q9">联系我们</span>
+                <span class="faq-arrow">▸</span>
+              </div>
+              <div class="faq-a">
+                <p data-i18n="faq_a9_1">如您有任何问题或建议，欢迎联系我:jsj999jcy@gmail.com</p>
+                <ul>
+                  <li data-i18n="faq_a9_2">功能痛点，使用的bug, 欢迎邮件联系我</li>
+                  <li data-i18n="faq_a9_3">项目为爱发电，部署在超级小鸡上，如果无法访问，请联系我续费服务器或域名</li>
+                  <li data-i18n="faq_a9_4">免费使用，项目为非商业项目，不提供商业支持，切勿滥用</li>
+                  <li data-i18n="faq_a9_5">项目使用的依赖为免费开源的，协议为Apache-2.0协议或MIT协议</li>
                 </ul>
               </div>
             </div>
@@ -630,7 +633,7 @@
     </main>
 
     <footer class="footer">
-      <p>基于 <a href="https://github.com/planby-technologies/rmbg-webgpu" target="_blank">@planby-tech/rmbg-webgpu</a> (MIT + Apache-2.0) · 所有处理均在浏览器本地完成</p>
+      <p data-i18n-html="footer">基于 <a href="https://github.com/planby-technologies/rmbg-webgpu" target="_blank">@planby-tech/rmbg-webgpu</a> (MIT + Apache-2.0) · 所有处理均在浏览器本地完成</p>
     </footer>
   </div>
 
