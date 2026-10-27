@@ -841,9 +841,6 @@ async function processBatch() {
   if (progressFill) progressFill.style.width = "0%";
   document.querySelector("#btnBatchProcess").disabled = true;
 
-  const sizeKey = document.querySelector("#batchSizeSelect")?.value || "original";
-  const preset = SIZE_PRESETS[sizeKey];
-
   let session;
   try {
     session = await getBatchRmbgSession();
@@ -896,22 +893,13 @@ async function processBatch() {
 
       ctx.drawImage(fgCanvas, 0, 0);
 
-      let finalCanvas = canvas;
-      if (preset && preset.width && preset.height) {
-        finalCanvas = document.createElement("canvas");
-        finalCanvas.width = preset.width;
-        finalCanvas.height = preset.height;
-        const fCtx = finalCanvas.getContext("2d");
-        const scale = Math.min(preset.width / w, preset.height / h);
-        const dw = w * scale;
-        const dh = h * scale;
-        const dx = (preset.width - dw) / 2;
-        const dy = (preset.height - dh) / 2;
-        fCtx.drawImage(canvas, dx, dy, dw, dh);
-      }
-
-      const outBlob = await new Promise((r) => finalCanvas.toBlob(r, "image/png"));
-      batchResults.push({ blob: outBlob, name: batchFiles[i].file.name.replace(/\.\w+$/, "") + "_processed.png" });
+      const compositeBlob = await new Promise((r) => canvas.toBlob(r, "image/png"));
+      batchResults.push({
+        compositeBlob,
+        origWidth: w,
+        origHeight: h,
+        name: batchFiles[i].file.name.replace(/\.\w+$/, "") + "_processed.png",
+      });
       batchFiles[i].status = "done";
 
       URL.revokeObjectURL(origUrl);
@@ -944,12 +932,43 @@ async function downloadBatchAsZip() {
   }
 
   try {
+    const sizeKey = document.querySelector("#batchSizeSelect")?.value || "original";
+    const preset = SIZE_PRESETS[sizeKey];
+
     const zip = new JSZip();
     const folderName = `证件照批量结果_${new Date().toISOString().slice(0, 10).replace(/-/g, "")}`;
     const folder = zip.folder(folderName);
 
     for (const item of batchResults) {
-      folder.file(item.name, item.blob);
+      const img = new Image();
+      img.src = URL.createObjectURL(item.compositeBlob);
+      await new Promise((r, reject) => { img.onload = r; img.onerror = reject; });
+
+      const w = item.origWidth;
+      const h = item.origHeight;
+
+      let finalCanvas;
+      if (preset && preset.width && preset.height) {
+        finalCanvas = document.createElement("canvas");
+        finalCanvas.width = preset.width;
+        finalCanvas.height = preset.height;
+        const fCtx = finalCanvas.getContext("2d");
+        const scale = Math.min(preset.width / w, preset.height / h);
+        const dw = w * scale;
+        const dh = h * scale;
+        const dx = (preset.width - dw) / 2;
+        const dy = (preset.height - dh) / 2;
+        fCtx.drawImage(img, dx, dy, dw, dh);
+      } else {
+        finalCanvas = document.createElement("canvas");
+        finalCanvas.width = w;
+        finalCanvas.height = h;
+        finalCanvas.getContext("2d").drawImage(img, 0, 0);
+      }
+
+      const outBlob = await new Promise((r) => finalCanvas.toBlob(r, "image/png"));
+      folder.file(item.name, outBlob);
+      URL.revokeObjectURL(img.src);
     }
 
     const zipBlob = await zip.generateAsync({ type: "blob" });
